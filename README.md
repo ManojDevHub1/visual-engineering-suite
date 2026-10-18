@@ -1,6 +1,6 @@
 # Visual Engineering Suite
 
-[![Tests](https://img.shields.io/badge/tests-25%20passed-brightgreen.svg)](#automated-testing)
+[![Tests](https://img.shields.io/badge/tests-30%20passed-brightgreen.svg)](#automated-testing)
 [![Open Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue.svg)](https://skills.sh)
 [![Antigravity Plugin](https://img.shields.io/badge/Antigravity-native%20plugin-purple.svg)](https://antigravity.google)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -228,13 +228,13 @@ To maintain engineering integrity, we document the following transparent limitat
 
 ## 11. Automated Testing
 
-The suite includes 25 unit and integration tests using Node.js's native test runner:
+The suite includes 30 unit and integration tests using Node.js's native test runner:
 
 ```bash
 npm test
 ```
 
-All 25 tests pass out of the box with zero external test framework overhead.
+All 30 tests pass out of the box with zero external test framework overhead.
 
 ---
 
