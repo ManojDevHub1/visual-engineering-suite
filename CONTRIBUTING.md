@@ -8,7 +8,7 @@ Thank you for your interest in contributing to the **Visual Engineering Suite**!
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/OWNER/visual-engineering-suite.git
+   git clone https://github.com/ManojDevHub1/visual-engineering-suite.git
    cd visual-engineering-suite
    ```
 

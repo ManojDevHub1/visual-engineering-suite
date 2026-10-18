@@ -1,20 +1,24 @@
+import { productConfig } from './data/site-config.js';
+
 /**
- * Centralized site and brand configuration.
- * Change brand name, URLs, or metadata here without editing dozens of components.
+ * Centralized site and brand configuration derived directly from canonical src/config.js.
+ * Single source of truth for repository URLs, metadata, and branding.
  */
 export const siteConfig = {
-  brandName: "Visual Engineering Suite",
-  shortName: "VES",
+  brandName: productConfig.name,
+  shortName: productConfig.shortName,
   tagline: "From Screenshot to Verified UI",
-  subheading: "Reconstruct interfaces, detect visual differences, and refine frontend implementations through evidence-driven AI workflows.",
-  version: "1.1.0",
-  license: "MIT",
-  author: "Visual Engineering Suite Contributors",
-  githubUrl: "https://github.com/visual-engineering-suite/visual-engineering-suite",
-  skillsShUrl: "https://skills.sh",
-  npmPackage: "visual-engineering-suite",
+  subheading: productConfig.description,
+  version: productConfig.version,
+  license: productConfig.license,
+  author: productConfig.author,
+  githubUrl: productConfig.repositoryUrl,
+  gitCloneUrl: productConfig.gitCloneUrl,
+  docsUrl: productConfig.docsUrl,
+  skillsShUrl: productConfig.skillsShUrl,
+  npmPackage: productConfig.npmPackage,
   primaryCtaText: "Get Started",
-  secondaryCtaText: "Explore the Workflow",
+  secondaryCtaText: "View on GitHub",
 
   navLinks: [
     { label: "Features", href: "#features" },
@@ -27,8 +31,8 @@ export const siteConfig = {
   ],
 
   meta: {
-    title: "Visual Engineering Suite — From Screenshot to Verified UI",
-    description: "Production-quality, cross-agent visual engineering skill suite for AI coding agents. Automated UI reconstruction, token extraction, pixel-level visual regression, and closed-loop refinement.",
+    title: `${productConfig.name} — From Screenshot to Verified UI`,
+    description: productConfig.description,
     keywords: [
       "agent skills",
       "visual engineering",

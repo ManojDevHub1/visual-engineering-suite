@@ -170,8 +170,8 @@ export const BENCHMARK_CASES: BenchmarkCaseMetadata[] = [
 ];
 
 export const BENCHMARK_LATEST_METRICS = {
-  "runId": "benchmark-run-1792317000830-a125cf0c",
-  "executedAt": "2026-10-18T09:50:01.696Z",
+  "runId": "benchmark-run-1792318294870-5746981a",
+  "executedAt": "2026-10-18T10:11:35.407Z",
   "environment": {
     "nodeVersion": "v24.19.0",
     "platform": "win32",

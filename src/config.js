@@ -7,11 +7,12 @@ export const productConfig = {
   shortName: 'VES',
   version: '1.1.0',
   description: 'Production-quality, cross-agent visual engineering skill suite for AI coding agents: UI reconstruction, token extraction, pixel-level visual regression, and closed-loop refinement.',
-  repositoryUrl: 'https://github.com/visual-engineering-suite/visual-engineering-suite',
+  repositoryUrl: 'https://github.com/ManojDevHub1/visual-engineering-suite',
+  gitCloneUrl: 'https://github.com/ManojDevHub1/visual-engineering-suite.git',
   license: 'MIT',
   author: 'Visual Engineering Suite Contributors',
   npmPackage: 'visual-engineering-suite',
-  docsUrl: 'https://github.com/visual-engineering-suite/visual-engineering-suite#readme',
+  docsUrl: 'https://github.com/ManojDevHub1/visual-engineering-suite#readme',
   skillsShUrl: 'https://skills.sh',
 
   // Supported Agent Integrations
@@ -76,3 +77,31 @@ export const productConfig = {
     }
   ]
 };
+
+/**
+ * Validates a GitHub repository URL.
+ * 
+ * @param {string} url 
+ * @returns {{ valid: boolean, error?: string }}
+ */
+export function validateRepositoryUrl(url) {
+  if (!url || typeof url !== 'string') {
+    return { valid: false, error: 'Repository URL is required and must be a non-empty string' };
+  }
+  try {
+    const parsed = new URL(url);
+    if (!['https:', 'http:'].includes(parsed.protocol)) {
+      return { valid: false, error: 'Repository URL must use https: or http: protocol' };
+    }
+    if (parsed.hostname !== 'github.com') {
+      return { valid: false, error: 'Repository URL must be hosted on github.com' };
+    }
+    const pathParts = parsed.pathname.replace(/\.git$/, '').split('/').filter(Boolean);
+    if (pathParts.length < 2) {
+      return { valid: false, error: 'Repository URL must contain owner and repository name' };
+    }
+    return { valid: true };
+  } catch (err) {
+    return { valid: false, error: `Invalid URL format: ${err.message}` };
+  }
+}

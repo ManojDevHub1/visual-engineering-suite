@@ -1,3 +1,5 @@
+import { siteConfig } from '../site.config.js';
+
 export const DOCS_SECTIONS = [
   {
     id: "getting-started",
@@ -15,7 +17,7 @@ export const DOCS_SECTIONS = [
 
       <h4>1. Clone and Install Core Dependencies</h4>
       <div class="code-box">
-        <pre><code>git clone https://github.com/visual-engineering-suite/visual-engineering-suite.git
+        <pre><code>git clone ${siteConfig.gitCloneUrl || (siteConfig.githubUrl + '.git')}
 cd visual-engineering-suite
 npm install</code></pre>
       </div>

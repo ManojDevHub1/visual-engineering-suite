@@ -44,6 +44,10 @@
   ],
   "author": "Visual Engineering Suite Contributors",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ManojDevHub1/visual-engineering-suite.git"
+  },
   "dependencies": {
     "pixelmatch": "^6.0.0",
     "pngjs": "^7.0.0"

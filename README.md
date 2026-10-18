@@ -1,6 +1,6 @@
 # Visual Engineering Suite
 
-[![CI Status](https://github.com/visual-engineering-suite/visual-engineering-suite/actions/workflows/ci.yml/badge.svg)](#automated-testing)
+[![CI Status](https://github.com/ManojDevHub1/visual-engineering-suite/actions/workflows/ci.yml/badge.svg)](#automated-testing)
 [![Tests](https://img.shields.io/badge/tests-79%20passed-brightgreen.svg)](#automated-testing)
 [![Open Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue.svg)](https://skills.sh)
 [![Antigravity Plugin](https://img.shields.io/badge/Antigravity-native%20plugin-purple.svg)](https://antigravity.google)
@@ -89,7 +89,7 @@ Get from zero to running your first verified visual regression check in under 5 
 ### Step 1: Clone and Install
 ```bash
 # Clone the repository
-git clone https://github.com/visual-engineering-suite/visual-engineering-suite.git
+git clone https://github.com/ManojDevHub1/visual-engineering-suite.git
 cd visual-engineering-suite
 
 # Install core runtime dependencies (pure JavaScript: pngjs + pixelmatch, zero C++ build tools)

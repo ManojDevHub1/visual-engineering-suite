@@ -71,10 +71,10 @@ mkdir -p ~/.cursor/skills && cp -r /path/to/visual-engineering-suite/skills/* ~/
     badge: "Standalone",
     badgeType: "badge-dark",
     description: "Clone directly into your project as a submodule or local dev dependency.",
-    command: `git clone ${siteConfig.githubUrl}.git && cd visual-engineering-suite && npm install`,
+    command: `git clone ${siteConfig.gitCloneUrl || (siteConfig.githubUrl + '.git')} && cd visual-engineering-suite && npm install`,
     manualInstructions: `
 # Clone repository
-git clone ${siteConfig.githubUrl}.git
+git clone ${siteConfig.gitCloneUrl || (siteConfig.githubUrl + '.git')}
 cd visual-engineering-suite
 
 # Install core runtime dependencies (pure JS: pngjs + pixelmatch, zero C++ build tools)
