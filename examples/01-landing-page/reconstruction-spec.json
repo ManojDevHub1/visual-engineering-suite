@@ -1,0 +1,52 @@
+{
+  "componentName": "SaaS Marketing Hero Section",
+  "referenceDimensions": {
+    "width": 800,
+    "height": 500,
+    "deviceContext": "desktop"
+  },
+  "layoutHierarchy": {
+    "root": "main-container (max-w-6xl mx-auto)",
+    "sections": [
+      {
+        "name": "Navigation Bar",
+        "type": "flex-row",
+        "alignment": "justify-between items-center",
+        "height": "56px"
+      },
+      {
+        "name": "Hero Section",
+        "type": "2-column-grid",
+        "leftColumn": ["Announce Badge", "H1 Title", "Subtitle", "Button Group"],
+        "rightColumn": ["Hero Product Graphic Card"]
+      }
+    ]
+  },
+  "observedFacts": [
+    "Canvas surface is dark slate (#0F172A).",
+    "Header has brand logo on left and 3 navigation links on right.",
+    "Left hero column contains pill badge, bold headline, subtitle, and 2 CTA buttons.",
+    "Primary button is solid blue (48px tall), secondary button is dark outlined (48px tall).",
+    "Right column contains an elevated product container card (252x284px)."
+  ],
+  "uncertainties": [
+    {
+      "element": "Typography",
+      "aspect": "font-family",
+      "hypothesis": "Inter or system sans-serif font stack",
+      "verificationPlan": "Verify host project font configuration"
+    },
+    {
+      "element": "Mobile Wrap",
+      "aspect": "responsive-behavior",
+      "hypothesis": "Collapse 2-column grid to 1-column stack below 768px",
+      "verificationPlan": "Test viewport capture at 390x844px"
+    }
+  ],
+  "components": [
+    { "id": "nav-logo", "type": "brand-logo", "description": "Cyan rounded logo badge" },
+    { "id": "badge-release", "type": "pill-badge", "description": "Version announcement pill badge" },
+    { "id": "btn-primary", "type": "cta-button", "description": "Primary action button (solid blue)" },
+    { "id": "btn-secondary", "type": "cta-button", "description": "Secondary action button (bordered)" }
+  ]
+}

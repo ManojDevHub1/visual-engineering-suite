@@ -1,0 +1,46 @@
+{
+  "componentName": "Ecommerce Product Card & Cart Quick-Add",
+  "referenceDimensions": {
+    "width": 390,
+    "height": 680,
+    "deviceContext": "mobile"
+  },
+  "layoutHierarchy": {
+    "root": "product-card (w-full max-w-sm bg-white rounded-2xl shadow-sm border)",
+    "sections": [
+      "Image Container with Discount Badge",
+      "Product Category & Title",
+      "Rating Stars with Review Count",
+      "Color Swatch Radio Group",
+      "Price Row & Quantity Selector",
+      "Full-Width Add to Cart CTA"
+    ]
+  },
+  "observedFacts": [
+    "Product image is 4:3 aspect ratio with rounded top corners.",
+    "Discount pill (-25% OFF) anchored in top-right corner in red.",
+    "3 circular color swatches (Midnight Black, Forest Green, Sandstone).",
+    "Quantity selector has '-' button, number display, and '+' button.",
+    "Add to Cart button occupies full card width with shopping bag icon."
+  ],
+  "uncertainties": [
+    {
+      "element": "Swatch Selection",
+      "aspect": "interactive-state",
+      "hypothesis": "Selected swatch displays 2px outer ring offset",
+      "verificationPlan": "Implement accessible radio group with :focus-visible and :checked rings"
+    },
+    {
+      "element": "Touch Targets",
+      "aspect": "responsive-behavior",
+      "hypothesis": "Quantity buttons must have min 44x44px hit area despite compact visual size",
+      "verificationPlan": "Audit against WCAG 2.5.5 touch target standard"
+    }
+  ],
+  "components": [
+    { "id": "badge-discount", "type": "badge", "description": "Top-right discount badge" },
+    { "id": "swatch-group", "type": "radio-group", "description": "Accessible color variant picker" },
+    { "id": "quantity-picker", "type": "stepper", "description": "Touch-accessible quantity counter" },
+    { "id": "cta-add-to-cart", "type": "action-button", "description": "Primary checkout / cart button" }
+  ]
+}

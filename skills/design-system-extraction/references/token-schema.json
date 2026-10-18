@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DesignTokenSpec",
+  "description": "Design tokens extracted from visual reference and aligned with project conventions",
+  "type": "object",
+  "required": ["colors", "spacing", "typography", "radii"],
+  "properties": {
+    "colors": {
+      "type": "object",
+      "properties": {
+        "primary": { "type": "string" },
+        "secondary": { "type": "string" },
+        "background": { "type": "string" },
+        "surface": { "type": "string" },
+        "text": {
+          "type": "object",
+          "properties": {
+            "primary": { "type": "string" },
+            "secondary": { "type": "string" },
+            "muted": { "type": "string" }
+          }
+        },
+        "border": { "type": "string" }
+      }
+    },
+    "spacing": {
+      "type": "object",
+      "description": "Spacing scale in rem or px (e.g. 4px, 8px, 16px, 24px, 32px)"
+    },
+    "typography": {
+      "type": "object",
+      "properties": {
+        "fontFamily": { "type": "object" },
+        "fontSize": { "type": "object" },
+        "fontWeight": { "type": "object" },
+        "lineHeight": { "type": "object" }
+      }
+    },
+    "radii": {
+      "type": "object",
+      "description": "Border radius values for buttons, cards, pills (e.g. sm: 4px, md: 8px, lg: 16px, full: 9999px)"
+    },
+    "shadows": {
+      "type": "object",
+      "description": "Box shadows or elevation levels"
+    },
+    "existingSystemReused": {
+      "type": "boolean",
+      "description": "True if tokens map directly to existing project config (e.g. Tailwind / CSS variables)"
+    }
+  }
+}

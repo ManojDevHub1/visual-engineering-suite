@@ -1,0 +1,44 @@
+{
+  "componentName": "Analytics Executive Dashboard",
+  "referenceDimensions": {
+    "width": 1280,
+    "height": 800,
+    "deviceContext": "desktop"
+  },
+  "layoutHierarchy": {
+    "root": "dashboard-layout (flex-row sidebar + main-content)",
+    "sidebar": "w-64 border-r border-slate-800 p-4",
+    "mainContent": {
+      "header": "h-16 border-b border-slate-800 flex justify-between items-center px-6",
+      "kpiRow": "grid grid-cols-3 gap-6 my-6",
+      "chartSection": "bg-slate-900 border border-slate-800 rounded-xl p-6 mb-6",
+      "dataTable": "bg-slate-900 border border-slate-800 rounded-xl overflow-hidden"
+    }
+  },
+  "observedFacts": [
+    "Sidebar occupies 256px fixed width on desktop.",
+    "3 KPI metric cards display: 'Total Revenue ($84,230)', 'Active Users (12,450)', 'Conversion Rate (3.4%)'.",
+    "Each KPI card has a trend pill (+12.5% in green, +4.2% in green, -0.8% in red).",
+    "Data table lists 5 columns: 'Transaction ID', 'Customer', 'Status', 'Date', 'Amount'."
+  ],
+  "uncertainties": [
+    {
+      "element": "Sidebar on Mobile",
+      "aspect": "responsive-behavior",
+      "hypothesis": "Convert to collapsible drawer / off-canvas sheet below 1024px",
+      "verificationPlan": "Verify responsive reflow checklist"
+    },
+    {
+      "element": "Empty State",
+      "aspect": "dynamic-data",
+      "hypothesis": "Display zero-state placeholder when no transactions match filter",
+      "verificationPlan": "Review component state matrix"
+    }
+  ],
+  "components": [
+    { "id": "sidebar-nav", "type": "vertical-nav", "description": "Sidebar navigation menu" },
+    { "id": "kpi-card", "type": "metric-card", "description": "Metric container with value and delta" },
+    { "id": "status-badge", "type": "status-pill", "description": "Pills for Completed, Pending, Failed" },
+    { "id": "tx-table", "type": "data-table", "description": "Semantic data table with accessible headers" }
+  ]
+}

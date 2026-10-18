@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard - Visual Engineering Suite</title>
+  <style>
+    :root {
+      --bg: #090D16;
+      --surface: #0F172A;
+      --surface-elevated: #1E293B;
+      --border: #334155;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --primary: #38BDF8;
+      --success: #10B981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --warning: #F59E0B;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --danger: #EF4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+    }
+    aside.sidebar {
+      width: 256px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-item.active a, .nav-item a:hover {
+      background: var(--surface-elevated);
+      color: var(--text);
+    }
+    .nav-item a:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    header.topbar {
+      height: 64px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    main.dashboard-body {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kpi-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .trend-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+    .trend-positive {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+    .trend-negative {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+    .kpi-value {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .table-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      padding: 16px 20px;
+      background: var(--surface-elevated);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background: rgba(30, 41, 59, 0.4);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-success { background: var(--success-bg); color: var(--success); }
+    .badge-warning { background: var(--warning-bg); color: var(--warning); }
+    .badge-danger { background: var(--danger-bg); color: var(--danger); }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+      <span>MetricsPro</span>
+    </div>
+    <nav aria-label="Sidebar Navigation">
+      <ul class="nav-list">
+        <li class="nav-item active"><a href="#overview">Overview</a></li>
+        <li class="nav-item"><a href="#analytics">Analytics</a></li>
+        <li class="nav-item"><a href="#customers">Customers</a></li>
+        <li class="nav-item"><a href="#settings">Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="content-area">
+    <header class="topbar">
+      <h1 class="page-title">Executive Overview</h1>
+      <button style="padding: 8px 16px; border-radius: 8px; background: var(--surface-elevated); border: 1px solid var(--border); color: var(--text); font-weight: 600; cursor: pointer;">
+        Download Report
+      </button>
+    </header>
+
+    <main class="dashboard-body">
+      <section class="kpi-grid" aria-label="Key Performance Indicators">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Total Revenue</span>
+            <span class="trend-pill trend-positive">+12.5%</span>
+          </div>
+          <div class="kpi-value">$84,230</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Active Users</span>
+            <span class="trend-pill trend-positive">+4.2%</span>
+          </div>
+          <div class="kpi-value">12,450</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Conversion Rate</span>
+            <span class="trend-pill trend-negative">-0.8%</span>
+          </div>
+          <div class="kpi-value">3.4%</div>
+        </div>
+      </section>
+
+      <section class="table-container" aria-label="Recent Transactions">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Transaction ID</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Status</th>
+              <th scope="col">Date</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TX-9021</td>
+              <td>Acme Corporation</td>
+              <td><span class="badge badge-success">Completed</span></td>
+              <td>Oct 17, 2026</td>
+              <td>$4,500.00</td>
+            </tr>
+            <tr>
+              <td>TX-9022</td>
+              <td>Globex Logistics</td>
+              <td><span class="badge badge-warning">Pending</span></td>
+              <td>Oct 16, 2026</td>
+              <td>$1,250.00</td>
+            </tr>
+            <tr>
+              <td>TX-9023</td>
+              <td>Soylent Industries</td>
+              <td><span class="badge badge-danger">Failed</span></td>
+              <td>Oct 15, 2026</td>
+              <td>$890.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

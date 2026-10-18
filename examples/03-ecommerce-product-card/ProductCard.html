@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Card - Visual Engineering Suite</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --primary: #0F172A;
+      --primary-hover: #1E293B;
+      --accent-red: #EF4444;
+      --text: #0F172A;
+      --text-muted: #64748B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 360px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .image-wrap {
+      position: relative;
+      width: 100%;
+      height: 240px;
+      background: #F1F5F9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .discount-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--accent-red);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+    }
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .category {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .product-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .swatches {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .swatch-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .swatch-group {
+      display: flex;
+      gap: 8px;
+    }
+    .swatch-option {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .swatch-option input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .swatch-option span {
+      width: 100%;
+      height: 100%;
+      border-radius: 9999px;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 0 1px var(--border);
+      transition: box-shadow 0.15s;
+    }
+    .swatch-option input:checked + span {
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+    .swatch-option input:focus-visible + span {
+      outline: 2px solid #38BDF8;
+      outline-offset: 2px;
+    }
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+    .price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .price-current {
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .price-original {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      height: 38px;
+    }
+    .stepper button {
+      min-width: 44px;
+      min-height: 44px;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .stepper button:hover {
+      background: #F1F5F9;
+    }
+    .stepper button:focus-visible {
+      outline: 2px solid #38BDF8;
+      outline-offset: -2px;
+    }
+    .stepper .val {
+      min-width: 32px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .btn-add {
+      width: 100%;
+      height: 48px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s, transform 0.05s;
+    }
+    .btn-add:hover {
+      background: var(--primary-hover);
+    }
+    .btn-add:active {
+      transform: scale(0.98);
+    }
+    .btn-add:focus-visible {
+      outline: 2px solid #38BDF8;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <article class="card" aria-label="Acoustic Noise-Cancelling Headphones">
+    <div class="image-wrap">
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120' fill='none'><rect width='160' height='120' rx='12' fill='%23E2E8F0'/><circle cx='80' cy='60' r='32' fill='%23CBD5E1'/></svg>" alt="Acoustic Pro wireless over-ear headphones in Midnight Black" style="max-height: 160px; object-fit: contain;">
+      <span class="discount-badge" aria-label="25 percent discount">-25% OFF</span>
+    </div>
+
+    <div class="card-body">
+      <div>
+        <p class="category">Audio Equipment</p>
+        <h2 class="product-title">Acoustic Pro Wireless ANC</h2>
+      </div>
+
+      <fieldset class="swatches" style="border: none;">
+        <legend class="swatch-label">Color: <span id="color-name">Midnight Black</span></legend>
+        <div class="swatch-group" role="radiogroup" aria-labelledby="color-name">
+          <label class="swatch-option" title="Midnight Black">
+            <input type="radio" name="color-variant" value="black" checked>
+            <span style="background: #0F172A;"></span>
+          </label>
+          <label class="swatch-option" title="Forest Green">
+            <input type="radio" name="color-variant" value="forest">
+            <span style="background: #1E3A2F;"></span>
+          </label>
+          <label class="swatch-option" title="Sandstone">
+            <input type="radio" name="color-variant" value="sand">
+            <span style="background: #D6C7B2;"></span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="price-row">
+        <div class="price-wrap">
+          <span class="price-current">$149.99</span>
+          <span class="price-original">$199.99</span>
+        </div>
+
+        <div class="stepper" role="group" aria-label="Item quantity stepper">
+          <button type="button" aria-label="Decrease quantity to 1">−</button>
+          <span class="val" aria-live="polite">1</span>
+          <button type="button" aria-label="Increase quantity to 2">+</button>
+        </div>
+      </div>
+
+      <button type="button" class="btn-add">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span>Add to Cart</span>
+      </button>
+    </div>
+  </article>
+</body>
+</html>

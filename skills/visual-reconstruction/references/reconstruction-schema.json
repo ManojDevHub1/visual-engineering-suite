@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VisualReconstructionSpec",
+  "description": "Schema for structured UI reconstruction specifications produced from visual references",
+  "type": "object",
+  "required": ["componentName", "layoutHierarchy", "observedFacts", "uncertainties", "components"],
+  "properties": {
+    "componentName": {
+      "type": "string",
+      "description": "Identifier or title of the UI section or component being reconstructed"
+    },
+    "referenceDimensions": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "deviceContext": { "type": "string", "enum": ["mobile", "tablet", "desktop", "unknown"] }
+      }
+    },
+    "layoutHierarchy": {
+      "type": "object",
+      "description": "Tree structure representing spatial layout (e.g. root container, grid/flex arrangement, flow direction)"
+    },
+    "observedFacts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Empirically verified visual facts (e.g. 'Navbar contains 4 navigation links', 'Primary button has solid blue background and white text')"
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["element", "aspect", "hypothesis", "verificationPlan"],
+        "properties": {
+          "element": { "type": "string" },
+          "aspect": { "type": "string", "enum": ["font-family", "exact-spacing", "hover-state", "responsive-behavior", "dynamic-data"] },
+          "hypothesis": { "type": "string" },
+          "verificationPlan": { "type": "string" }
+        }
+      },
+      "description": "Explicit record of unverified visual aspects requiring assumptions or runtime testing"
+    },
+    "typographyScale": {
+      "type": "object",
+      "description": "Observed relative font sizes, weights, and line heights"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "children": { "type": "array" }
+        }
+      }
+    }
+  }
+}
