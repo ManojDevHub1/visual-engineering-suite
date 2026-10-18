@@ -19,9 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Repeatability and measurement stability auditor measuring pixel variance across multiple runs (100% deterministic, 0 px variance).
   - Multi-agent empirical evaluation profiles tracking 6 explicit verification levels.
   - Output artifacts under `.visual-engineering/benchmarks/<run-id>/` including `benchmark-results.json`, `benchmark-report.md`, and visual diff maps.
-- **Automated Testing & CI Integration**:
-  - 16 new automated tests in `tests/benchmark.test.js` and `tests/cli.test.js` bringing test suite to 71 passing tests across 14 suites.
-  - CI workflow updated with automated benchmark validation and test execution across Ubuntu, macOS, and Windows.
+- **Official Premium Product Website & Documentation Hub (`website/`)**:
+  - High-performance Vite + TypeScript static site built with native CSS design tokens and dark-mode surfaces.
+  - Zero-drift automated data compilation (`scripts/build-site-data.js`) generating typed data structures directly from canonical `skills/` and `benchmarks/`.
+  - Interactive Visual Refinement Diff Viewer showcasing before/diff/after visual regression triage with discrepancy bounding boxes.
+  - Interactive Skills Explorer with markdown reference modal and instant search filtering.
+  - Copyable installation center with tabs for Antigravity, Claude Code, Cursor, and Vercel Skills CLI.
+  - Fully responsive layout verified at 375px (mobile), 768px (tablet portrait), 1024px (tablet landscape/desktop), and 1440px (wide).
+  - Production build producing zero console errors and zero 404 network warnings.
+- **Automated Testing & Release Candidate Validation**:
+  - 79 automated tests passing across 15 suites in `tests/*.test.js` using Node.js native test runner (`node:test`).
+  - GitHub Actions CI workflow updated with automated benchmark validation, linting, packaging, and doctor audits across Ubuntu, macOS, and Windows on Node 18, 20, 22, and 24.
 
 ## [1.0.0] - 2026-10-18
 
