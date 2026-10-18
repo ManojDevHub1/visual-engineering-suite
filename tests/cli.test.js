@@ -71,11 +71,11 @@ describe('CLI Quality Tools Integration', () => {
     assert.strictEqual(parsed.code, 'DIMENSION_MISMATCH');
   });
 
-  test('ves-screenshot returns code 2 when Playwright is not installed', () => {
+  test('ves-screenshot returns code 2 when Playwright or browser binaries are not installed', () => {
     const res = runCli('bin/ves-screenshot.js https://example.com tests/output/test.png --json');
     assert.strictEqual(res.code, 2);
     const parsed = JSON.parse(res.stdout);
-    assert.strictEqual(parsed.code, 'PLAYWRIGHT_NOT_INSTALLED');
+    assert.ok(['PLAYWRIGHT_NOT_INSTALLED', 'PLAYWRIGHT_BROWSERS_MISSING'].includes(parsed.code));
   });
 
   test('ves-diff returns code 2 on non-numeric threshold', () => {

@@ -7,6 +7,10 @@ skills-lock.json
 tests/output/
 .visual-engineering/
 
+# Build artifacts
+dist/
+website/dist/
+
 # OS and Editor files
 .DS_Store
 Thumbs.db

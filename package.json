@@ -25,7 +25,10 @@
     "benchmark": "node bin/ves-benchmark.js",
     "benchmark:visual": "node bin/ves-benchmark.js --mode visual",
     "benchmark:functional": "node bin/ves-benchmark.js --mode functional",
-    "benchmark:validate": "node bin/ves-benchmark.js --mode validate"
+    "benchmark:validate": "node bin/ves-benchmark.js --mode validate",
+    "build:site": "node scripts/build-site-data.js && vite build",
+    "dev:site": "node scripts/build-site-data.js && vite",
+    "serve:site": "vite preview"
   },
   "keywords": [
     "agent-skills",
@@ -45,7 +48,9 @@
     "pixelmatch": "^6.0.0",
     "pngjs": "^7.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "vite": "^8.3.4"
+  },
   "optionalDependencies": {
     "playwright": "^1.40.0"
   },
