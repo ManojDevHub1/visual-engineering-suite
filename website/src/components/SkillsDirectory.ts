@@ -4,71 +4,78 @@ export function renderSkillsDirectory(): string {
   return `
     <section id="skills" class="section" aria-labelledby="skills-title">
       <div class="container">
+        <!-- Section Header -->
         <div class="section-header">
-          <div class="badge badge-purple" style="margin-bottom: var(--space-3);">Canonical Skills Directory</div>
-          <h2 id="skills-title">7 Specialist Visual Engineering Skills</h2>
+          <div class="eyebrow">Canonical Engineering Toolkit</div>
+          <h2 id="skills-title">7 Modular Specialist Skills</h2>
           <p>
-            Compliant with the Open Agent Skills specification. Installable as standalone skills, via the Vercel Skills CLI, or bundled as a native Google Antigravity plugin.
+            Compliant with the Open Agent Skills specification. Installable across Google Antigravity, Claude Code, Cursor, and Agent Skills CLI.
           </p>
 
-          <!-- Search / Filter input -->
-          <div class="skills-search-wrapper" style="margin-top: var(--space-6);">
-            <div class="search-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              <input type="text" id="skill-search" placeholder="Filter skills by keyword (e.g. diff, tokens, wcag, playwright)..." aria-label="Filter skills" />
+          <!-- Search & Filter Controls -->
+          <div class="skills-filter-strip">
+            <div class="skills-search-bar">
+              <span class="search-prompt">&gt;</span>
+              <input type="text" id="skill-search" placeholder="Filter skills (e.g. diff, tokens, wcag, playwright, refinement)..." aria-label="Filter skills" />
             </div>
-            <span id="skill-count" class="badge" style="align-self: center;">${CANONICAL_SKILLS.length} of ${CANONICAL_SKILLS.length} skills</span>
+            <span id="skill-count" class="badge badge-dark">${CANONICAL_SKILLS.length} of ${CANONICAL_SKILLS.length} skills</span>
           </div>
         </div>
 
-        <div class="skills-grid" id="skills-grid">
-          ${CANONICAL_SKILLS.map((skill) => `
-            <div class="card skill-card" data-skill-name="${skill.name.toLowerCase()}" data-skill-desc="${skill.description.toLowerCase()}">
-              <div class="skill-header">
-                <div>
+        <!-- Asymmetric Toolkit Grid -->
+        <div class="skills-editorial-grid" id="skills-grid">
+          ${CANONICAL_SKILLS.map((skill, index) => {
+            const isFeatured = index === 0 || index === 4 || index === 6;
+            return `
+              <div class="skill-editorial-card skill-card ${isFeatured ? 'skill-card-featured' : ''}" 
+                   data-skill-name="${skill.name.toLowerCase()}" 
+                   data-skill-desc="${skill.description.toLowerCase()}">
+                <div class="skill-card-top">
+                  <span class="skill-index-tag">${String(index + 1).padStart(2, '0')}</span>
+                  <span class="badge badge-lime">Canonical</span>
+                </div>
+
+                <div class="skill-title-block">
                   <h3 class="skill-name"><code>${skill.name}</code></h3>
-                  <span class="badge badge-green" style="font-size: 0.65rem; margin-top: 4px;">Canonical Spec</span>
+                  <p class="skill-description">${skill.description}</p>
                 </div>
-              </div>
 
-              <p class="skill-description">${skill.description}</p>
-
-              <div class="skill-meta-group">
-                <div class="skill-meta-block">
-                  <span class="meta-label">Helper Scripts (${skill.scripts.length}):</span>
-                  <div class="chip-group">
-                    ${skill.scripts.length > 0 ? skill.scripts.map(s => `<span class="chip"><code>${s}</code></span>`).join('') : '<span class="text-muted" style="font-size: 0.8rem;">None</span>'}
+                <div class="skill-specs-box">
+                  <div class="spec-row">
+                    <span class="spec-label">SCRIPTS:</span>
+                    <div class="spec-chips">
+                      ${skill.scripts.length > 0 ? skill.scripts.map(s => `<span class="chip-code"><code>${s}</code></span>`).join('') : '<span class="text-faint">None</span>'}
+                    </div>
+                  </div>
+                  <div class="spec-row">
+                    <span class="spec-label">REFERENCES:</span>
+                    <div class="spec-chips">
+                      ${skill.references.map(r => `<span class="chip-ref">${r}</span>`).join('')}
+                    </div>
                   </div>
                 </div>
 
-                <div class="skill-meta-block">
-                  <span class="meta-label">Reference Schemas (${skill.references.length}):</span>
-                  <div class="chip-group">
-                    ${skill.references.map(r => `<span class="chip chip-accent">${r}</span>`).join('')}
-                  </div>
+                <div class="skill-card-footer">
+                  <span class="skill-source-path">skills/${skill.name}</span>
+                  <button type="button" class="btn btn-secondary btn-sm skill-detail-btn" data-skill-target="${skill.name}">
+                    <span>Inspect Spec</span>
+                    <span aria-hidden="true">&rarr;</span>
+                  </button>
                 </div>
               </div>
-
-              <div class="skill-footer">
-                <span class="skill-source-path">${skill.path}</span>
-                <button type="button" class="btn btn-secondary btn-sm skill-detail-btn" data-skill-target="${skill.name}">View Details</button>
-              </div>
-            </div>
-          `).join('')}
+            `;
+          }).join('')}
         </div>
 
         <!-- Detail Modal Container (Controlled via JS) -->
         <div id="skill-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="modal-skill-title">
-          <div class="modal-card card">
+          <div class="modal-card card card-dark">
             <div class="modal-header">
-              <div>
-                <span class="badge badge-purple" id="modal-skill-badge">Specialist Skill</span>
-                <h3 id="modal-skill-title" style="margin-top: 8px;"></h3>
+              <div class="modal-title-wrap">
+                <span class="badge badge-lime" id="modal-skill-badge">Canonical Skill Spec</span>
+                <h3 id="modal-skill-title" class="modal-skill-heading"></h3>
               </div>
-              <button type="button" class="modal-close" aria-label="Close modal">&times;</button>
+              <button type="button" class="modal-close" aria-label="Close skill modal">&times;</button>
             </div>
             <div class="modal-body" id="modal-skill-body"></div>
           </div>

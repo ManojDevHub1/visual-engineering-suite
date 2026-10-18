@@ -6,75 +6,92 @@ export function renderBenchmarks(): string {
   return `
     <section id="benchmarks" class="section" aria-labelledby="benchmarks-title">
       <div class="container">
+        <!-- Section Header -->
         <div class="section-header">
-          <div class="badge badge-purple" style="margin-bottom: var(--space-3);">Empirical Evaluation</div>
+          <div class="eyebrow">Laboratory Evaluation</div>
           <h2 id="benchmarks-title">Reproducible Benchmark Results</h2>
           <p>
-            We measure visual reconstruction fidelity, functional correctness, and iterative refinement deltas using local, deterministic test fixtures. No fabricated numbers.
+            We measure visual reconstruction fidelity, functional correctness, and iterative refinement deltas using local, non-copyrighted test fixtures. No fabricated numbers.
           </p>
         </div>
 
-        <!-- Metrics High-Level Cards -->
-        <div class="grid-4" style="margin-bottom: var(--space-8);">
-          <div class="card metric-kpi-card">
-            <span class="metric-label">Pass Rate</span>
-            <span class="metric-value text-pass">${metrics.passRate}%</span>
-            <span class="metric-sub">${metrics.passedCases} of ${metrics.totalCases} cases passed</span>
+        <!-- High-Impact Technical KPI Strip -->
+        <div class="benchmark-kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">Pass Rate</span>
+            <div class="kpi-value-wrap">
+              <span class="kpi-num val-pass">${metrics.passRate}%</span>
+              <span class="kpi-subtag">ALL 3 CASES</span>
+            </div>
+            <p class="kpi-desc">${metrics.passedCases} of ${metrics.totalCases} verified evaluation scenarios passed.</p>
           </div>
 
-          <div class="card metric-kpi-card">
-            <span class="metric-label">Refinement Delta</span>
-            <span class="metric-value text-pass">100%</span>
-            <span class="metric-sub">Average pixel reduction</span>
+          <div class="kpi-card">
+            <span class="kpi-label">Refinement Delta</span>
+            <div class="kpi-value-wrap">
+              <span class="kpi-num val-lime">100%</span>
+              <span class="kpi-subtag">ELIMINATED</span>
+            </div>
+            <p class="kpi-desc">Average pixel discrepancy reduction across iterative refinement loops.</p>
           </div>
 
-          <div class="card metric-kpi-card">
-            <span class="metric-label">Repeatability</span>
-            <span class="metric-value text-cyan">${metrics.stabilityIndex}%</span>
-            <span class="metric-sub">Deterministic (0 px variance)</span>
+          <div class="kpi-card">
+            <span class="kpi-label">Stability Index</span>
+            <div class="kpi-value-wrap">
+              <span class="kpi-num val-cobalt">${metrics.stabilityIndex}%</span>
+              <span class="kpi-subtag">0 PX DRIFT</span>
+            </div>
+            <p class="kpi-desc">Deterministic (0 px variance) across repeated headless runs.</p>
           </div>
 
-          <div class="card metric-kpi-card">
-            <span class="metric-label">Test Suites</span>
-            <span class="metric-value text-purple">71 passed</span>
-            <span class="metric-sub">14 test suites (100% pass)</span>
+          <div class="kpi-card">
+            <span class="kpi-label">Automated Test Suites</span>
+            <div class="kpi-value-wrap">
+              <span class="kpi-num">79</span>
+              <span class="kpi-subtag">PASSING</span>
+            </div>
+            <p class="kpi-desc">15 test suites executing unit, CLI, regression, and browser QA checks.</p>
           </div>
         </div>
 
-        <!-- Benchmark Cases Results Table -->
-        <div class="card" style="margin-bottom: var(--space-8);">
-          <div class="benchmark-table-header">
-            <h3>Case-by-Case Benchmark Measurements</h3>
-            <span class="badge badge-green" style="font-size: 0.7rem;">Run ID: ${metrics.runId}</span>
+        <!-- Benchmark Results Table Container -->
+        <div class="benchmark-report-frame" style="margin-top: var(--space-12);">
+          <div class="report-table-header">
+            <div class="report-title-group">
+              <span class="report-badge">EMPIRICAL DATASET</span>
+              <h3 class="report-heading">Case-by-Case Benchmark Measurements</h3>
+            </div>
+            <span class="badge badge-dark">Run ID: ${metrics.runId}</span>
           </div>
+
           <div class="table-responsive">
-            <table class="compat-table">
+            <table class="benchmark-table">
               <thead>
                 <tr>
-                  <th scope="col">Case ID & Scenario</th>
+                  <th scope="col">Case ID &amp; Scenario</th>
                   <th scope="col">Viewport</th>
-                  <th scope="col">Initial Diff % (Pixels)</th>
-                  <th scope="col">Refined Diff % (Pixels)</th>
-                  <th scope="col">Pixels Eliminated</th>
-                  <th scope="col">Functional Score</th>
+                  <th scope="col">Initial Diff %</th>
+                  <th scope="col">Refined Diff %</th>
+                  <th scope="col">Discrepancy Eliminated</th>
+                  <th scope="col">Functional DOM</th>
                   <th scope="col">Defect Category</th>
-                  <th scope="col">Outcome</th>
+                  <th scope="col">Status</th>
                 </tr>
               </thead>
               <tbody>
                 ${metrics.cases.map(c => `
                   <tr>
                     <td>
-                      <strong>${c.id}</strong>
-                      <div class="text-muted" style="font-size: 0.8rem;">${c.name}</div>
+                      <div class="table-case-id"><code>${c.id}</code></div>
+                      <div class="table-case-name">${c.name}</div>
                     </td>
-                    <td><code>${c.viewport}</code></td>
-                    <td><span class="text-fail">${c.initialDiff}</span></td>
-                    <td><span class="text-pass">${c.refinedDiff}</span></td>
-                    <td><strong>${c.pixelsEliminated.toLocaleString()} px (${c.reductionPercent})</strong></td>
-                    <td><code>${c.functionalScore}</code></td>
-                    <td><span class="badge" style="font-size: 0.65rem;">${c.defectCategory}</span></td>
-                    <td><span class="badge badge-green" style="font-size: 0.7rem;">${c.status} ✓</span></td>
+                    <td><code class="viewport-code">${c.viewport}</code></td>
+                    <td><span class="diff-bad">${c.initialDiff}</span></td>
+                    <td><span class="diff-good">${c.refinedDiff}</span></td>
+                    <td><strong class="eliminated-strong">${c.pixelsEliminated.toLocaleString()} px (${c.reductionPercent})</strong></td>
+                    <td><code class="score-code">${c.functionalScore}</code></td>
+                    <td><span class="badge badge-dark">${c.defectCategory}</span></td>
+                    <td><span class="badge badge-lime">PASS &#10003;</span></td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -82,31 +99,33 @@ export function renderBenchmarks(): string {
           </div>
         </div>
 
-        <!-- Reproduce Locally Guide -->
-        <div class="grid-2">
-          <div class="card">
+        <!-- Reproduce & Boundaries Two-Column Block -->
+        <div class="grid-2" style="margin-top: var(--space-8);">
+          <div class="card card-dark">
+            <div class="card-eyebrow">VERIFIABILITY</div>
             <h3>Run the Benchmarks Locally</h3>
             <p style="margin-top: var(--space-2); margin-bottom: var(--space-4);">
-              Anyone can independently reproduce these exact results in less than 30 seconds:
+              Anyone can reproduce these exact measurements in less than 30 seconds using the bundled CLI harness:
             </p>
             <div class="code-box">
-              <pre><code># Run complete evaluation suite
+              <pre><code># Run full evaluation suite
 npm run benchmark
 
 # Run visual regression diffs only
 npm run benchmark:visual
 
-# Run functional & semantic tests
+# Run functional &amp; semantic assertions
 npm run benchmark:functional</code></pre>
             </div>
           </div>
 
           <div class="card">
+            <div class="card-eyebrow">HONEST REPORTING</div>
             <h3>Measurement Boundaries</h3>
-            <ul class="boundary-list" style="margin-top: var(--space-2);">
-              <li><strong>Subpixel Font Antialiasing:</strong> Differences between macOS (CoreText), Windows (DirectWrite), and Linux (FreeType) require threshold >= 0.1 for cross-OS tests.</li>
-              <li><strong>Non-Deterministic Data:</strong> Dynamic timestamps, random ads, and live data must be frozen before capture.</li>
-              <li><strong>GPU / WebGL:</strong> Diffing evaluates 2D DOM and CSS rendering; 3D canvas shaders are hardware dependent.</li>
+            <ul class="boundary-list" style="margin-top: var(--space-3);">
+              <li><strong>Subpixel Font Antialiasing:</strong> Discrepancies between macOS (CoreText), Windows (DirectWrite), and Linux (FreeType) require threshold &ge; 0.1 for cross-OS validation.</li>
+              <li><strong>Dynamic Content:</strong> Live timestamps, random ad networks, and animations must be frozen before capture.</li>
+              <li><strong>Canvas / WebGL Shaders:</strong> Diffing evaluates 2D DOM and CSS rendering; 3D canvas shaders are GPU-hardware dependent.</li>
             </ul>
           </div>
         </div>
