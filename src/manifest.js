@@ -272,7 +272,7 @@ export async function validateRepositorySkills(rootDir) {
   async function walk(dir) {
     const entries = await fs.promises.readdir(dir, { withFileTypes: true }).catch(() => []);
     for (const entry of entries) {
-      if (entry.name === 'node_modules' || entry.name === '.git' || (entry.name === 'fixtures' && path.basename(dir) === 'tests')) continue;
+      if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.visual-engineering' || (entry.name === 'tests' && dir === rootDir) || (entry.name === 'fixtures' && path.basename(dir) === 'tests')) continue;
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
         const skillMd = path.join(fullPath, 'SKILL.md');

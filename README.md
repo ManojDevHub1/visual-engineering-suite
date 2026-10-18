@@ -1,205 +1,122 @@
 # Visual Engineering Suite
 
-[![Tests](https://img.shields.io/badge/tests-44%20passed-brightgreen.svg)](#automated-testing)
+[![CI Status](https://github.com/visual-engineering-suite/visual-engineering-suite/actions/workflows/ci.yml/badge.svg)](#automated-testing)
+[![Tests](https://img.shields.io/badge/tests-55%20passed-brightgreen.svg)](#automated-testing)
 [![Open Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue.svg)](https://skills.sh)
 [![Antigravity Plugin](https://img.shields.io/badge/Antigravity-native%20plugin-purple.svg)](https://antigravity.google)
+[![Node: >= 18.0.0](https://img.shields.io/badge/node-%3E%3D%2018.0.0-green.svg)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-A production-quality, open-source, cross-agent visual engineering skill suite for AI coding agents (Google Antigravity, Claude Code, Cursor, and Agent Skills-compatible platforms).
+A production-quality, open-source, cross-agent visual engineering skill suite for AI coding agents (**Google Antigravity**, **Claude Code**, **Cursor**, and **Agent Skills**-compatible platforms).
+
+It enables AI coding agents to inspect visual mockups, mine design tokens, implement accessible frontend components, capture multi-viewport screenshots, execute pixel-level visual regression triage, and run closed-loop iterative refinements with verified on-disk evidence.
 
 ---
 
-## 1. The Problem Being Solved
+## Table of Contents
+
+1. [The Problem: Superficial AI Frontend Generation](#1-the-problem-superficial-ai-frontend-generation)
+2. [The Solution: Closed-Loop Visual Engineering](#2-the-solution-closed-loop-visual-engineering)
+3. [Quick Start (Zero to First Visual Diff in Under 5 Minutes)](#3-quick-start)
+4. [Cross-Agent Installation Guide](#4-cross-agent-installation-guide)
+5. [System Health & Drift Verification (`ves-doctor`)](#5-system-health--drift-verification-ves-doctor)
+6. [5-Level Agent Compatibility Matrix](#6-5-level-agent-compatibility-matrix)
+7. [The 7 Canonical Specialist Skills](#7-the-7-canonical-specialist-skills)
+8. [Executable Quality Tooling (`bin/`)](#8-executable-quality-tooling-bin)
+9. [Reproducible Demonstration Workflow](#9-reproducible-demonstration-workflow)
+10. [Real-World Included Examples](#10-real-world-included-examples)
+11. [Antigravity Plugin Packaging (`ves-pack`)](#11-antigravity-plugin-packaging-ves-pack)
+12. [Troubleshooting & FAQ](#12-troubleshooting--faq)
+13. [Security & Privacy](#13-security--privacy)
+14. [Automated Testing & CI](#14-automated-testing--ci)
+15. [Contributing & Community](#15-contributing--community)
+
+---
+
+## 1. The Problem: Superficial AI Frontend Generation
 
 When AI coding assistants are asked to *"implement this screenshot"* or *"build this UI"*, they typically produce superficial code:
-- Guessing arbitrary padding, font sizes, and colors rather than extracting design tokens.
-- Ignoring existing codebase conventions, duplicate CSS classes, and established design systems.
-- Declaring victory without ever verifying the rendered browser output or testing viewport behavior.
-- Missing responsive overflow failures, broken focus rings, and accessibility violations.
+- **Hallucinating Design Tokens**: Introducing arbitrary inline hex codes and magic pixel margins rather than discovering existing Tailwind themes or CSS variables.
+- **Unverified Victory Claims**: Declaring the implementation finished without rendering the component in a browser or verifying responsive behavior.
+- **Silent Visual Discrepancies**: Missing layout displacements, incorrect font weights, missing icons, or wrong button color states.
+- **Accessibility & Reflow Ignorance**: Skipping WCAG contrast ratios (≥4.5:1), removing focus outlines, and generating fixed-width containers that break on mobile screens (<320px).
 
-The **Visual Engineering Suite** replaces blind one-shot generation with a systematic, closed-loop engineering workflow:
-
-```mermaid
-flowchart LR
-    A["REFERENCE\n(Screenshot/Mockup)"] --> B["VISUAL ANALYSIS\n(Hierarchy & Facts)"]
-    B --> C["DESIGN SPECIFICATION\n(Tokens & Variants)"]
-    C --> D["IMPLEMENTATION\n(Semantic Frontend)"]
-    D --> E["BROWSER RENDERING\n(Standard Viewports)"]
-    E --> F["VISUAL COMPARISON\n(Pixelmatch Diff)"]
-    F --> G{"Discrepancies\nDetected?"}
-    G -- Yes --> H["ISSUE TRIAGE\n(Rank by Severity)"]
-    H --> I["CORRECTION\n(Surgical Fixes)"]
-    I --> D
-    G -- No --> J["ACCESSIBILITY\n& PERF AUDIT"]
-    J --> K["FINAL REPORT\n(Verified Delivery)"]
-```
-
----
-
-## 2. Key Differences from Generic Prompting
-
-| Dimension | Generic Frontend Prompt | Visual Engineering Suite |
+| Dimension | Generic Prompting Approach | Visual Engineering Suite |
 | :--- | :--- | :--- |
 | **Observation** | Conflates guesses with visual facts | Formally separates empirical observations from hypotheses and logs uncertainty |
-| **Tokens** | Introduces arbitrary inline hex codes and magic margins | Discovers and reuses existing Tailwind configs, CSS variables, or project theme tokens |
+| **Design Tokens** | Introduces arbitrary inline hex codes and magic margins | Discovers and reuses existing Tailwind configs, CSS custom properties, and design tokens |
 | **Verification** | Assumes the code matches because it compiled | Renders in real browser and measures pixel discrepancy against reference mockups |
-| **Regression Triage** | Vague feedback ("Make it look cleaner") | Exact coordinate bounding box `[minX..maxX, minY..maxY]`, diff percentage, and severity triage |
+| **Discrepancy Triage** | Vague feedback ("Make it look cleaner") | Exact coordinate bounding box `[minX..maxX, minY..maxY]`, diff percentage, and severity triage |
 | **Portability** | Hardcoded to one proprietary chat window | Standardized `SKILL.md` format installable across Antigravity, Claude Code, and Cursor |
+| **Refinement** | Infinite loops repeating the same mistake | Configurable iteration caps, stagnation detection, and safety circuit breakers |
 
 ---
 
-## 3. The 7 Specialist Skills
+## 2. The Solution: Closed-Loop Visual Engineering
 
-The suite organizes visual engineering into seven focused, single-responsibility skills:
+The **Visual Engineering Suite** replaces blind one-shot generation with a rigorous, evidence-driven engineering workflow:
 
-### 1. `visual-reconstruction`
-- **When to activate**: When provided a mockup, screenshot, or URL that needs to be reconstructed into code.
-- **Responsibilities**: Inspects reference dimensions, decomposes spatial hierarchy, establishes typography ladders, separates facts from assumptions, and produces a structured UI specification before coding begins.
-- **Artifacts**: [reconstruction-schema.json](./skills/visual-reconstruction/references/reconstruction-schema.json), [visual-analysis-guide.md](./skills/visual-reconstruction/references/visual-analysis-guide.md).
-
-### 2. `design-system-extraction`
-- **When to activate**: When establishing or harmonizing design tokens for colors, spacing, typography, radii, and shadows.
-- **Responsibilities**: Inspects the host repository for existing Tailwind or CSS custom properties, prevents token sprawl, and maps candidate colors to project conventions.
-- **Artifacts**: [token-schema.json](./skills/design-system-extraction/references/token-schema.json), [token-mapping-guide.md](./skills/design-system-extraction/references/token-mapping-guide.md).
-
-### 3. `frontend-implementation`
-- **When to activate**: When writing or updating component code in the host codebase.
-- **Responsibilities**: Follows framework conventions (React, Next.js, Vue, Svelte), enforces semantic HTML, handles the full state matrix (loading, empty, error, active, focus-visible), and preserves existing architecture without unrelated rewrites.
-- **Artifacts**: [state-matrix-template.md](./skills/frontend-implementation/references/state-matrix-template.md), [framework-adaptation-guide.md](./skills/frontend-implementation/references/framework-adaptation-guide.md).
-
-### 4. `browser-visual-qa`
-- **When to activate**: When rendering implemented components in a browser environment to capture screenshots and monitor runtime behavior.
-- **Responsibilities**: Detects native agent browser tools or invokes the Playwright capture runner, captures standard viewports (`mobile`, `tablet`, `desktop`, `wide`), and inspects console errors and failed network requests.
-- **Artifacts**: [viewport-standards.md](./skills/browser-visual-qa/references/viewport-standards.md).
-
-### 5. `visual-regression-triage`
-- **When to activate**: When comparing reference mockups against candidate browser captures.
-- **Responsibilities**: Asserts identical viewport dimensions, executes pixel-level visual diffing via `pixelmatch`, computes mismatch counts and discrepancy bounding boxes, filters out antialiasing noise, and prioritizes fixes by severity.
-- **Artifacts**: [triage-taxonomy.md](./skills/visual-regression-triage/references/triage-taxonomy.md).
-
-### 6. `accessibility-performance-audit`
-- **When to activate**: When verifying compliance with accessibility standards and responsive reflow rules.
-- **Responsibilities**: Scans for missing `alt` attributes, unlabelled buttons, and removed focus outlines; verifies WCAG 2.1 AA color contrast (≥4.5:1); checks touch targets (≥44x44px); and tests reflow down to 320px.
-- **Artifacts**: [wcag-checklist.md](./skills/accessibility-performance-audit/references/wcag-checklist.md), [responsive-reflow-guide.md](./skills/accessibility-performance-audit/references/responsive-reflow-guide.md).
-
-### 7. `visual-refinement-loop`
-- **When to activate**: When coordinating an end-to-end multi-step refinement loop with configurable iteration limits, early termination, and automated run artifact generation.
-- **Responsibilities**: Drives the complete closed-loop cycle (`REFERENCE → ANALYSIS → IMPLEMENTATION → RENDER → DIFF → TRIAGE → FIX → VERIFY → REPORT`). Enforces a strict iteration limit (default: 3), halts on test regressions or stagnation, and stores run records under `.visual-engineering/runs/<run-id>/`.
-- **Artifacts**: [refinement-protocol.md](./skills/visual-refinement-loop/references/refinement-protocol.md), [acceptance-criteria-guide.md](./skills/visual-refinement-loop/references/acceptance-criteria-guide.md), [run-artifact-spec.json](./skills/visual-refinement-loop/references/run-artifact-spec.json).
-
----
-
-## 4. Multi-Agent Compatibility Matrix
-
-| Platform | Project Installation Path | Global Installation Path | Native Support | Verification Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **Google Antigravity** | `.agents/skills/<name>/` | `~/.gemini/antigravity/skills/` | Native Plugin (`plugin.json`) | **Verified** |
-| **Claude Code** | `.claude/skills/<name>/` | `~/.claude/skills/` | Agent Skills format (`SKILL.md`) | **Verified** |
-| **Cursor** | `.agents/skills/<name>/` | `~/.cursor/skills/` | Open `.agents` standard | **Verified** |
-| **Vercel Skills CLI** | Dynamic via `skills add` | Dynamic via `skills add -g` | Open Agent Skills spec | **Verified** |
-
----
-
-## 5. Installation
-
-### Method A: Vercel Skills CLI (Recommended for Multi-Agent Projects)
-Install skills directly into all supported agents using the official Skills CLI:
-
-```bash
-# Install to Claude Code, Cursor, and Antigravity simultaneously
-npx skills add <OWNER>/visual-engineering-suite -a claude-code -a cursor -a antigravity -y
-
-# Or install to all detected agents
-npx skills add <OWNER>/visual-engineering-suite --all -y
-```
-
-### Method B: Native Google Antigravity Plugin
-This repository is packaged as a ready-to-run Antigravity plugin with a root `plugin.json` and `rules/AGENTS.md`.
-
-- **Workspace Scope**: Place or submodule the repository at `.agents/plugins/visual-engineering-suite/` in your project root.
-- **Global Scope**: Clone or copy to `~/.gemini/config/plugins/visual-engineering-suite/` and restart the agent.
-
-### Method C: Manual Installation
-For manual installation without package managers, copy the `skills/` directory:
-- **Claude Code**: Copy `skills/*` into `.claude/skills/` in your workspace.
-- **Cursor**: Copy `skills/*` into `.agents/skills/` in your workspace.
-- **Antigravity**: Copy `skills/*` into `.agents/skills/` in your workspace.
-
----
-
-## 6. Executable Quality Tools (`bin/`)
-
-The suite includes five standalone, portable Node.js executables with zero compilation requirements:
-
-### `ves-env` — Environment & Capability Auditor
-Checks runtime prerequisites, image libraries, and detected agent installations.
-```bash
-node bin/ves-env.js [--json]
-```
-
-### `ves-validate` — Skill & Plugin Manifest Validator
-Validates all `SKILL.md` frontmatter, kebab-case naming, internal markdown links, and `plugin.json` conformance.
-```bash
-node bin/ves-validate.js [directory] [--json]
-```
-
-### `ves-dimension` — Fast Dimension Validator
-Inspects image dimensions or asserts dimension equivalence between reference and candidate screenshots before diffing.
-```bash
-node bin/ves-dimension.js <imagePath>
-node bin/ves-dimension.js <reference.png> <candidate.png> [--json]
-```
-
-### `ves-diff` — Pixel-Level Visual Regression Engine
-Compares reference and candidate PNGs, computes exact pixel metrics, outputs high-visibility magenta diff maps, and pinpoints discrepancy bounding boxes.
-```bash
-node bin/ves-diff.js <reference.png> <candidate.png> --diff output/diff.png --threshold 0.1 [--json]
-```
-
-### `ves-screenshot` — Headless Browser Capture Runner
-Captures screenshots at standard viewports (`mobile`, `tablet`, `desktop`, `wide`), logging JavaScript console errors and failed network requests.
-```bash
-node bin/ves-screenshot.js <url> <outputPath> --preset desktop [--json]
-```
-*(Requires optional dependency: `npm i -D playwright`)*
-
-### `ves-refine` — Visual Refinement Engine Coordinator
-Coordinates the multi-iteration visual refinement loop, enforcing configurable iteration caps, early termination on criteria satisfaction, stagnation detection, and saving local run artifacts under `.visual-engineering/runs/<run-id>/`.
-```bash
-# Initialize a refinement run
-node bin/ves-refine.js init --reference <ref.png> --max-iterations 3 --max-diff 0.5 [--json]
-
-# Record an iteration step
-node bin/ves-refine.js step --run <runId> --rendered <candidate.png> [--threshold 0.1] [--test-passed true] [--json]
-
-# Combined single evaluation
-node bin/ves-refine.js run --reference <ref.png> --rendered <candidate.png> [--max-diff 0.5] [--json]
-
-# Check run history and summary
-node bin/ves-refine.js status --run <runId>
+```mermaid
+flowchart TD
+    A["REFERENCE\n(Screenshot / Mockup / Figma)"] --> B["1. VISUAL ANALYSIS\n(Hierarchy, Layout, Typography)"]
+    B --> C["2. DESIGN SYSTEM EXTRACTION\n(Mine Tokens, Map Conventions)"]
+    C --> D["3. FRONTEND IMPLEMENTATION\n(Accessible Component, States Matrix)"]
+    D --> E["4. BROWSER RENDERING\n(Multi-Viewport Headless Capture)"]
+    E --> F["5. VISUAL REGRESSION ENGINE\n(Pure-JS Pixelmatch Diff)"]
+    F --> G{"Discrepancies\nDetected?"}
+    G -- "Yes (Diff > Allowance)" --> H["6. ISSUE TRIAGE\n(Severity Classification, Coordinates)"]
+    H --> I{"Iteration Cap\nor Stagnation?"}
+    I -- "Cap Reached / Stagnated" --> J["HALT & REPORT\n(Persisted Run Artifacts)"]
+    I -- "Under Cap" --> K["SURGICAL CORRECTION\n(Targeted Code Fixes)"]
+    K --> D
+    G -- "No (Criteria Met)" --> L["7. ACCESSIBILITY & REFLOW AUDIT\n(WCAG 2.1 AA, Contrast, Touch Targets)"]
+    L --> M["VERIFIED REPORT\n(Deliver Code with Evidence)"]
 ```
 
 ---
 
-## 7. Minimal Reproducible Example
+## 3. Quick Start
 
-Here is a 3-step demonstration you can execute immediately in this workspace:
+Get from zero to running your first verified visual regression check in under 5 minutes:
 
+### Prerequisites
+- Node.js **>= 18.0.0**
+- npm **>= 9.0.0**
+- Git
+
+### Step 1: Clone and Install
 ```bash
-# 1. Run the environment capability auditor
-node bin/ves-env.js
+# Clone the repository
+git clone https://github.com/visual-engineering-suite/visual-engineering-suite.git
+cd visual-engineering-suite
 
-# 2. Validate all 6 canonical skills and plugin manifest
-npm run validate
+# Install core runtime dependencies (pure JavaScript: pngjs + pixelmatch, zero C++ build tools)
+npm install
+```
 
-# 3. Perform a real visual diff on our landing page example
+### Step 2: Run the System Doctor
+Verify your environment, dependencies, canonical skills, and agent discovery paths:
+```bash
+npm run check-health
+# or: node bin/ves-doctor.js
+```
+
+### Step 3: Run the Automated Test Suite
+Execute the 55 automated unit and integration tests:
+```bash
+npm test
+```
+
+### Step 4: Run the Quick Visual Diff Example
+Compare the reference marketing hero against the candidate render:
+```bash
 node bin/ves-diff.js \
   examples/01-landing-page/reference-hero.png \
   examples/01-landing-page/rendered-hero.png \
   --diff examples/01-landing-page/diff-hero.png
 ```
 
-**Expected Result**:
+**Terminal Output**:
 ```text
 === Visual Regression Analysis ===
 
@@ -212,53 +129,350 @@ Status:          FAILED ✗
 Discrepancy Box: [x: 48..207, y: 248..295] (size: 160x48px)
 Difference Map:  examples/01-landing-page/diff-hero.png
 ```
-The discrepancy box (`x: 48..207, y: 248..295`) directly identifies the CTA button where the candidate render used an indigo background rather than reference blue.
+The discrepancy bounding box `[x: 48..207, y: 248..295]` immediately isolates the primary Call-to-Action button where the candidate render used an indigo background rather than reference blue.
 
 ---
 
-## 8. Real-World Working Examples
+## 4. Cross-Agent Installation Guide
 
-The `examples/` directory contains complete reference implementations:
+The Visual Engineering Suite maintains **one canonical source of truth** under `skills/<skill-name>/SKILL.md` and provides first-class support for multiple AI coding agents.
+
+```mermaid
+flowchart TD
+    Canonical["skills/<name>/SKILL.md\n(Single Canonical Source)"] --> Antigravity["Google Antigravity\n(.agents/skills/ or Native Plugin)"]
+    Canonical --> ClaudeCode["Claude Code\n(.claude/skills/)"]
+    Canonical --> Cursor["Cursor\n(.agents/skills/ or .cursor/skills/)"]
+    Canonical --> SkillsCLI["Vercel Skills CLI\n(npx skills add .)"]
+```
+
+### Option A: Vercel Skills CLI (Recommended for Multi-Agent Workspaces)
+
+The official [Vercel Skills CLI](https://skills.sh) installs skills across multiple agents simultaneously:
+
+```bash
+# Install to Claude Code, Cursor, and Antigravity in one command
+npx skills add <OWNER>/visual-engineering-suite -a claude-code -a cursor -a antigravity -y
+
+# Or install to all detected agents in your workspace
+npx skills add <OWNER>/visual-engineering-suite --all -y
+
+# To install from a local clone:
+npx skills add . --all -y
+```
+
+### Option B: Google Antigravity
+
+Antigravity supports both **native plugin bundling** and **workspace skills**:
+
+#### 1. Native Workspace Plugin (Recommended)
+Place or submodule the suite into your workspace's plugin folder:
+```bash
+# Package into .agents/plugins/
+node bin/ves-pack.js --dest .agents/plugins/visual-engineering-suite
+```
+The plugin includes `plugin.json`, `rules/AGENTS.md`, and all 7 canonical skills with bundled references.
+
+#### 2. Workspace Skills Directory
+Copy the skills directly into `.agents/skills/`:
+```bash
+# On Linux / macOS:
+mkdir -p .agents/skills && cp -r skills/* .agents/skills/
+
+# On Windows (PowerShell):
+New-Item -ItemType Directory -Force -Path .agents/skills; Copy-Item -Recurse -Force skills/* .agents/skills/
+```
+
+#### 3. Global Antigravity Plugin
+Clone or copy the directory to your user profile:
+- Windows: `%USERPROFILE%\.gemini\config\plugins\visual-engineering-suite\`
+- macOS / Linux: `~/.gemini/config/plugins/visual-engineering-suite/`
+
+### Option C: Claude Code
+
+Claude Code discovers skills placed in `.claude/skills/`:
+
+#### Workspace Scope
+```bash
+# From workspace root
+mkdir -p .claude/skills && cp -r /path/to/visual-engineering-suite/skills/* .claude/skills/
+```
+
+#### Personal / Global Scope
+```bash
+# Available across all your Claude Code projects
+mkdir -p ~/.claude/skills && cp -r /path/to/visual-engineering-suite/skills/* ~/.claude/skills/
+```
+
+### Option D: Cursor
+
+Cursor discovers skills complying with the Open Agent Skills specification in `.agents/skills/`:
+
+```bash
+mkdir -p .agents/skills && cp -r /path/to/visual-engineering-suite/skills/* .agents/skills/
+```
+Or for user-level global configuration:
+```bash
+mkdir -p ~/.cursor/skills && cp -r /path/to/visual-engineering-suite/skills/* ~/.cursor/skills/
+```
+
+---
+
+## 5. System Health & Drift Verification (`ves-doctor`)
+
+The suite provides a built-in health-check and drift detection tool (`ves-doctor`):
+
+```bash
+npm run check-health
+# or with JSON output for automated tooling:
+node bin/ves-doctor.js --json
+```
+
+### What `ves-doctor` Inspects:
+1. **Runtime Prerequisites**: Node.js version (>= 18.0.0), npm availability, and operating system platform.
+2. **Dependency Health**: Core image I/O (`pngjs`), visual regression engine (`pixelmatch`), and optional browser capture runner (`playwright`).
+3. **Canonical Skill Integrity**: Validates all 7 canonical `SKILL.md` frontmatter manifests, verifies internal markdown references, and checks helper scripts.
+4. **Antigravity Plugin Manifest**: Checks `plugin.json` schema, logo asset existence, and `rules/AGENTS.md`.
+5. **Cross-Agent Installation Detection**: Discovers installed skills across `.agents/skills`, `.claude/skills`, `.cursor/skills`, and global user config directories.
+6. **SHA-256 Checksum Drift Detection**: Compares installed `SKILL.md` files against canonical originals, alerting you if an installed skill has drifted or become outdated.
+
+### Exit Codes:
+- `0`: Healthy — all required systems and canonical skills operational.
+- `1`: Warning — ready for core use, but optional features (e.g. Playwright) missing or drifted installed skill detected.
+- `2`: Critical — unsupported Node version, missing core dependencies, or invalid/corrupt canonical skill.
+
+---
+
+## 6. 5-Level Agent Compatibility Matrix
+
+We distinguish **five explicit verification levels** to maintain strict technical honesty:
+
+| Verification Level | Meaning & Criteria |
+| :--- | :--- |
+| **Level 1: FORMAT VALIDATED** | The `SKILL.md` frontmatter, YAML key-value pairs, kebab-case naming, and directory layout comply with the platform's specification using automated schema validators. |
+| **Level 2: DISCOVERY VERIFIED** | The platform's discovery system (e.g. Connect RPC, skill catalog, directory scanner) has been observed or officially specified to index the skill by name. |
+| **Level 3: INSTALLATION VERIFIED** | The installation mechanism (copy, CLI, plugin build) has been executed in the actual environment, placing skills in the expected directory. |
+| **Level 4: INVOCATION VERIFIED** | An agent on that platform has been directly prompted and observed parsing and activating the skill during a live conversation. |
+| **Level 5: WORKFLOW VERIFIED** | An end-to-end multi-step task (visual reconstruction, diffing, refinement loop) has been autonomously driven by the agent using the skill to produce verified artifacts. |
+
+### Compatibility & Verification Status
+
+| Platform | Workspace Path | Global Path | Installation Mechanism | Script Execution | External Dependencies | Verification Level | Evidence & Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Google Antigravity** | `.agents/plugins/` or `.agents/skills/` | `~/.gemini/config/plugins/` or `~/.gemini/antigravity/skills/` | Native Plugin (`plugin.json`), Skills CLI, manual copy | Native terminal execution (`run_command`) | Node.js runtime (`pngjs`, `pixelmatch`, optional `playwright`) | **Level 5: WORKFLOW VERIFIED** | Directly executed in Antigravity pair programming session: full refinement loop, diffing, tests, and run artifacts verified on disk. |
+| **Claude Code** | `.claude/skills/` | `~/.claude/skills/` | Skills CLI (`npx skills add . -a claude-code`), manual copy | Bash tool | Node.js runtime via project `node_modules` or `npx` | **Level 3: INSTALLATION VERIFIED** | Validated against Anthropic Agent Skills spec. Installation verified via Skills CLI. Invocation documented per official docs. |
+| **Cursor** | `.agents/skills/` or `.cursor/skills/` | `~/.cursor/skills/` | Skills CLI (`npx skills add . -a cursor`), manual copy | Terminal tool execution | Node.js runtime via project `node_modules` or `npx` | **Level 3: INSTALLATION VERIFIED** | Validated against open `.agents` standard. Directory placement verified via Skills CLI. Invocation documented per official docs. |
+| **Vercel Skills CLI** | Dynamic | Dynamic (`-g`) | CLI tool (`npx skills add <source>`) | Copies scripts and references intact | Standard Node.js environment | **Level 3: INSTALLATION VERIFIED** | Tested with local and remote sources; successfully copies canonical skills into target agent folders. |
+
+---
+
+## 7. The 7 Canonical Specialist Skills
+
+The suite is organized into seven focused, single-responsibility skills located under `skills/`:
+
+```text
+skills/
+├── visual-reconstruction/
+│   ├── SKILL.md
+│   ├── references/ (reconstruction-schema.json, visual-analysis-guide.md)
+│   └── scripts/ (check-dimensions.js)
+├── design-system-extraction/
+│   ├── SKILL.md
+│   ├── references/ (token-schema.json, token-mapping-guide.md)
+│   └── scripts/ (inspect-tokens.js)
+├── frontend-implementation/
+│   ├── SKILL.md
+│   ├── references/ (state-matrix-template.md, framework-adaptation-guide.md)
+│   └── scripts/ (inspect-codebase.js)
+├── browser-visual-qa/
+│   ├── SKILL.md
+│   ├── references/ (viewport-standards.md)
+│   └── scripts/ (capture.js)
+├── visual-regression-triage/
+│   ├── SKILL.md
+│   ├── references/ (triage-taxonomy.md)
+│   └── scripts/ (diff.js)
+├── accessibility-performance-audit/
+│   ├── SKILL.md
+│   ├── references/ (wcag-checklist.md, responsive-reflow-guide.md)
+│   └── scripts/ (audit-markup.js)
+└── visual-refinement-loop/
+    ├── SKILL.md
+    ├── references/ (acceptance-criteria-guide.md, refinement-protocol.md, run-artifact-spec.json)
+    └── scripts/ (run-refinement.js)
+```
+
+### 1. `visual-reconstruction`
+- **When to Activate**: When given a UI screenshot, mockup, or URL to reconstruct into frontend code.
+- **Key Responsibilities**: Extracts visual hierarchy, establishes typography ladders, inspects container bounds, and produces a structured `reconstruction-spec.json` explicitly separating visual facts from assumptions.
+- **Reference Assets**: [reconstruction-schema.json](./skills/visual-reconstruction/references/reconstruction-schema.json), [visual-analysis-guide.md](./skills/visual-reconstruction/references/visual-analysis-guide.md).
+
+### 2. `design-system-extraction`
+- **When to Activate**: When establishing or harmonizing design tokens for colors, spacing, typography, radii, and shadows.
+- **Key Responsibilities**: Scans host repository for existing Tailwind themes, CSS custom properties, or token files to prevent token sprawl; produces a formal `tokens.json`.
+- **Reference Assets**: [token-schema.json](./skills/design-system-extraction/references/token-schema.json), [token-mapping-guide.md](./skills/design-system-extraction/references/token-mapping-guide.md).
+
+### 3. `frontend-implementation`
+- **When to Activate**: When writing or modifying component code in the host repository.
+- **Key Responsibilities**: Adapts to host framework (React, Next.js, Vue, Svelte, or semantic HTML), adheres to existing directory structure, and handles full UI state matrix (loading, empty, error, active, focus-visible).
+- **Reference Assets**: [state-matrix-template.md](./skills/frontend-implementation/references/state-matrix-template.md), [framework-adaptation-guide.md](./skills/frontend-implementation/references/framework-adaptation-guide.md).
+
+### 4. `browser-visual-qa`
+- **When to Activate**: When rendering implemented components in a real browser to capture screenshots and inspect runtime behavior.
+- **Key Responsibilities**: Captures standard viewports (`mobile: 375x667`, `tablet: 768x1024`, `desktop: 1280x800`, `wide: 1920x1080`), monitors JavaScript console errors, and tracks failed network requests.
+- **Reference Assets**: [viewport-standards.md](./skills/browser-visual-qa/references/viewport-standards.md).
+
+### 5. `visual-regression-triage`
+- **When to Activate**: When comparing reference mockups against candidate browser screenshots.
+- **Key Responsibilities**: Pure-JS pixel-diffing using `pixelmatch`, computes mismatch counts and discrepancy bounding boxes `[minX..maxX, minY..maxY]`, filters antialiasing noise, and prioritizes fixes by severity.
+- **Reference Assets**: [triage-taxonomy.md](./skills/visual-regression-triage/references/triage-taxonomy.md).
+
+### 6. `accessibility-performance-audit`
+- **When to Activate**: When verifying accessibility compliance and responsive reflow.
+- **Key Responsibilities**: Scans semantic markup, checks WCAG 2.1 AA color contrast (≥4.5:1), enforces touch target minimums (≥44x44px), verifies visible focus rings, and checks reflow down to 320px viewport width.
+- **Reference Assets**: [wcag-checklist.md](./skills/accessibility-performance-audit/references/wcag-checklist.md), [responsive-reflow-guide.md](./skills/accessibility-performance-audit/references/responsive-reflow-guide.md).
+
+### 7. `visual-refinement-loop`
+- **When to Activate**: When executing an end-to-end multi-step refinement loop.
+- **Key Responsibilities**: Coordinates closed-loop iterations, enforces configurable iteration limits (default: 3), halts on test regression or stagnation, and persists verifiable run records in `.visual-engineering/runs/<run-id>/`.
+- **Reference Assets**: [acceptance-criteria-guide.md](./skills/visual-refinement-loop/references/acceptance-criteria-guide.md), [refinement-protocol.md](./skills/visual-refinement-loop/references/refinement-protocol.md), [run-artifact-spec.json](./skills/visual-refinement-loop/references/run-artifact-spec.json).
+
+---
+
+## 8. Executable Quality Tooling (`bin/`)
+
+The suite ships with lightweight, portable Node.js executables with zero compilation requirements:
+
+| CLI Tool | Description | Usage Example |
+| :--- | :--- | :--- |
+| `ves-doctor` | System, skill integrity, and cross-agent installation health check | `node bin/ves-doctor.js [--json]` |
+| `ves-pack` | Antigravity plugin packager and bundle checksum manifest generator | `node bin/ves-pack.js [--dest <dir>] [--validate-only]` |
+| `ves-refine` | Autonomous visual refinement coordinator and run artifact tracker | `node bin/ves-refine.js init --reference <ref.png>` |
+| `ves-diff` | Pure-JS pixel-level visual regression engine and bounding box locator | `node bin/ves-diff.js <ref.png> <render.png> --diff diff.png` |
+| `ves-dimension` | Fast PNG/JPEG header dimension inspector and equivalence comparator | `node bin/ves-dimension.js <image1.png> [image2.png]` |
+| `ves-validate` | Canonical `SKILL.md` frontmatter and `plugin.json` manifest validator | `node bin/ves-validate.js [directory]` |
+| `ves-env` | Machine capability and dependency auditor | `node bin/ves-env.js [--json]` |
+| `ves-screenshot` | Multi-viewport headless browser capture runner (optional Playwright) | `node bin/ves-screenshot.js <url> <out.png> --preset desktop` |
+
+---
+
+## 9. Reproducible Demonstration Workflow
+
+The repository includes a complete, standalone visual refinement demonstration in `examples/01-landing-page/`.
+
+### Run the Demonstration
+```bash
+node examples/01-landing-page/run-demo-refinement.js
+```
+
+### Demonstration Steps:
+1. **Initial State (Iteration 1)**:
+   - Evaluates `rendered-hero.png` against `reference-hero.png`.
+   - Discrepancy detected: Diff of **1.92% (7,680 pixels)**.
+   - Bounding box identifies CTA button background color mismatch (`#4F46E5` vs reference `#2563EB`).
+   - Run continues: `shouldTerminate: false`.
+2. **Corrected State (Iteration 2)**:
+   - Applies targeted CSS fix matching design tokens.
+   - Re-evaluates rendered output: Diff of **0% (0 pixels)**.
+   - Acceptance criteria satisfied: `shouldTerminate: true`.
+   - Final status: `COMPLETED_SUCCESS`.
+3. **Inspect Generated Run Artifacts**:
+   - Location: `.visual-engineering/runs/demo-refinement-run/`
+   - Files:
+     * `run.json`: Complete machine-readable run telemetry.
+     * `summary.md`: Human-readable markdown audit report.
+     * `reference.png`: Immutable reference capture.
+     * `render-iter-1.png` & `diff-iter-1.png`: First iteration discrepancy map.
+     * `render-iter-2.png` & `diff-iter-2.png`: Final verified clean render map.
+
+---
+
+## 10. Real-World Included Examples
+
+The `examples/` directory contains complete reference scenarios demonstrating each phase:
 
 1. **[01-Landing-Page](./examples/01-landing-page)**:
-   - Modern marketing hero section with navigation bar, announcement pill, headline, and dual CTAs.
-   - Genuine before/after PNG images, real diff map, reconstruction spec, and triage report.
+   - Modern SaaS marketing hero with navigation bar, announcement badge, headline, and dual CTAs.
+   - Includes real before/after PNGs, diff map, tokens, reconstruction spec, and complete refinement run artifacts.
 2. **[02-Analytics-Dashboard](./examples/02-analytics-dashboard)**:
    - Executive dashboard with responsive 3-column KPI metric cards, data table, and WCAG 2.1 AA audit report.
 3. **[03-Ecommerce-Product-Card](./examples/03-ecommerce-product-card)**:
-   - Mobile product card with accessible radio-group color swatches, 44x44px touch-target quantity stepper, and quick-add CTA.
+   - Mobile product card with accessible radio-group swatches, 44x44px touch targets, and visual regression triage report.
 
 ---
 
-## 9. Known Limitations
+## 11. Antigravity Plugin Packaging (`ves-pack`)
 
-To maintain engineering integrity, we document the following transparent limitations:
-1. **Operating System Font Antialiasing**: Text rendering engines differ between macOS (CoreText), Windows (DirectWrite), and Linux (FreeType). When comparing across different operating systems, use `--threshold 0.1` and `--include-aa=false` to avoid false positives on font edges.
-2. **Dynamic / Non-Deterministic Content**: Pages displaying timestamps, live video feeds, or randomized advertising will produce false diffs. Mock or freeze dynamic data before capturing screenshots.
-3. **WebGL / Canvas 3D Graphics**: Pixel-diffing is designed for DOM and CSS interfaces. GPU-accelerated 3D canvases may exhibit hardware-dependent shader differences.
-
----
-
-## 10. Security Considerations
-
-- **Prompt Injection Defense**: Text extracted from screenshots or live web pages is treated strictly as **untrusted data**. The suite's operating rules explicitly prohibit executing arbitrary instructions discovered inside images.
-- **Zero Exfiltration**: No screenshots, diff maps, or codebase contents are transmitted to external services.
-- **No Global Installs**: Tools run locally via Node.js without requiring root or global administrative privileges.
-
----
-
-## 11. Automated Testing
-
-The suite includes 44 unit and integration tests using Node.js's native test runner (`node:test` and `node:assert`):
+To export a clean, production-ready Antigravity plugin distribution bundle:
 
 ```bash
-npm test
+# Validate packaging readiness without writing files
+node bin/ves-pack.js
+
+# Build a distribution bundle into dist/
+node bin/ves-pack.js --dest dist/visual-engineering-suite
 ```
 
-All 44 tests pass out of the box covering CLI tools, visual diffing, dimension matching, manifest validation, iteration limits, stagnation detection, and refinement run persistence with zero external test framework overhead.
+The packager validates the plugin manifest (`plugin.json`), referenced assets (`assets/logo.svg`), rules (`rules/AGENTS.md`), and canonical skills, then generates a cryptographically hashed manifest (`ves-bundle.json`) with SHA-256 signatures for every file in the release.
 
 ---
 
-## 12. Contributing & Bug Reports
+## 12. Troubleshooting & FAQ
 
-We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines and [SECURITY.md](./SECURITY.md) for vulnerability reporting.
+### Q: Why does `ves-doctor` show a warning about Playwright?
+**A**: Playwright is an **optional dependency** used for automated browser screenshot capture. Core visual diffing, dimension checking, token extraction, and refinement coordination use pure JavaScript (`pngjs` + `pixelmatch`) and require no browser binaries. If you need automated browser screenshots, install Playwright:
+```bash
+npm install --save-optional playwright
+npx playwright install chromium
+```
+
+### Q: Why do font edges produce pixel diffs across different operating systems?
+**A**: Text rendering subpixel antialiasing differs between macOS (CoreText), Windows (DirectWrite), and Linux (FreeType). When comparing screenshots generated across different OS environments:
+- Increase diff threshold: `--threshold 0.1` or `0.15`
+- Set antialiasing filter: `--include-aa false`
+- Alternatively, run headless Chrome in a Docker container for pixel-identical cross-platform rendering.
+
+### Q: How do skill helper scripts resolve CLI tools when installed inside an agent?
+**A**: All helper scripts in `skills/<name>/scripts/` use dynamic portable path resolution. They check `../../../bin/`, `process.cwd()/bin/`, and `node_modules` before falling back to `npx`, ensuring they execute seamlessly whether running inside the repository or inside `.agents/skills/` or `.claude/skills/`.
+
+### Q: How do I know if my installed skills are outdated?
+**A**: Run `npm run check-health` (or `node bin/ves-doctor.js`). It hashes all installed `SKILL.md` files against the canonical repository skills and reports any drifted or modified files.
+
+---
+
+## 13. Security & Privacy
+
+- **Untrusted Visual Data Defense**: Text, labels, and prompts extracted from mockups or screenshots are treated strictly as **untrusted data**. Operating rules prohibit executing instructions or commands found inside images.
+- **Zero Cloud Exfiltration**: All visual comparison, pixel diffing, token parsing, and refinement runs execute locally on your machine. No screenshots or source code are transmitted to external services.
+- **No Global Admin Privileges**: The entire suite runs in local user space without requiring `sudo` or global administrative permissions.
+
+---
+
+## 14. Automated Testing & CI
+
+The suite includes 55 unit and integration tests using Node.js's native test runner (`node:test` and `node:assert`):
+
+```bash
+# Run all tests
+npm test
+
+# Validate canonical skill manifests
+npm run validate
+```
+
+### Continuous Integration (GitHub Actions)
+The repository includes a comprehensive GitHub Actions matrix workflow (`.github/workflows/ci.yml`) testing on:
+- **Node.js**: `18.x`, `20.x`, `22.x`, `24.x`
+- **Operating Systems**: `ubuntu-latest`, `windows-latest`, `macos-latest`
+
+---
+
+## 15. Contributing & Community
+
+We welcome contributions from frontend engineers, agent tooling developers, and visual QA specialists!
+
+- Read our [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines, PR conventions, and coding standards.
+- View our [CHANGELOG.md](./CHANGELOG.md) for version history.
+- Report security issues following our [SECURITY.md](./SECURITY.md) policy.
+
+### License
+This project is open-source software licensed under the [MIT License](./LICENSE).

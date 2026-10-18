@@ -115,4 +115,21 @@ describe('CLI Quality Tools Integration', () => {
     assert.strictEqual(parsedJpg.width, 600);
     assert.strictEqual(parsedJpg.format, 'jpeg');
   });
+
+  test('ves-doctor returns exit code 0 or 1 with valid JSON output', () => {
+    const res = runCli('bin/ves-doctor.js --json');
+    assert.ok(res.code === 0 || res.code === 1);
+    const parsed = JSON.parse(res.stdout);
+    assert.strictEqual(parsed.canonicalSkills.validCount, 7);
+    assert.strictEqual(parsed.dependencies.pngjs, true);
+  });
+
+  test('ves-pack validates plugin readiness and exits with code 0', () => {
+    const res = runCli('bin/ves-pack.js --json');
+    assert.strictEqual(res.code, 0);
+    const parsed = JSON.parse(res.stdout);
+    assert.strictEqual(parsed.valid, true);
+    assert.strictEqual(parsed.skillsCount, 7);
+  });
 });
+
