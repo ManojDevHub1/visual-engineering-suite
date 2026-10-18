@@ -3,48 +3,37 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { compareImages } from './diff.js';
 import { getImageDimensions } from './dimensions.js';
+import { AGENT_COMPATIBILITY_RECORDS } from './data/compatibility.js';
 
 /**
  * 6 Explicit Verification Levels for AI Coding Agents.
  */
 export const AGENT_VERIFICATION_LEVELS = {
-  LEVEL_1_FORMAT_VALIDATED: 'FORMAT_VALIDATED',
-  LEVEL_2_DISCOVERY_VERIFIED: 'DISCOVERY_VERIFIED',
-  LEVEL_3_INSTALLATION_VERIFIED: 'INSTALLATION_VERIFIED',
-  LEVEL_4_INVOCATION_VERIFIED: 'INVOCATION_VERIFIED',
-  LEVEL_5_TASK_EXECUTION: 'TASK_EXECUTION',
-  LEVEL_6_BENCHMARK_COMPLETED: 'END_TO_END_BENCHMARK_COMPLETED'
+  LEVEL_1_FORMAT_VALIDATED: 'Tier 1: Format Validated',
+  LEVEL_2_DISCOVERY_VERIFIED: 'Tier 2: Discovery Verified',
+  LEVEL_3_INSTALLATION_VERIFIED: 'Tier 3: Installation Verified',
+  LEVEL_4_INVOCATION_VERIFIED: 'Tier 4: Invocation Verified',
+  LEVEL_5_TASK_EXECUTION: 'Tier 5: Task Execution',
+  LEVEL_6_BENCHMARK_COMPLETED: 'Tier 6: Benchmark Completed'
 };
 
 /**
- * Baseline Agent Evaluation Profiles based on empirical testing.
+ * Baseline Agent Evaluation Profiles derived from single source of truth AGENT_COMPATIBILITY_RECORDS.
  */
-export const KNOWN_AGENT_PROFILES = {
-  antigravity: {
-    agentName: 'Google Antigravity',
-    testedVersion: '2.0.0',
-    verificationLevel: AGENT_VERIFICATION_LEVELS.LEVEL_6_BENCHMARK_COMPLETED,
-    executionMethod: 'Native background terminal commands & connected language server RPC',
-    lastEvaluated: '2026-10-18',
-    notes: 'Directly executed and verified in Antigravity pair programming session.'
-  },
-  'claude-code': {
-    agentName: 'Claude Code',
-    testedVersion: 'latest',
-    verificationLevel: AGENT_VERIFICATION_LEVELS.LEVEL_3_INSTALLATION_VERIFIED,
-    executionMethod: 'Skills CLI installation to .claude/skills/',
-    lastEvaluated: '2026-10-18',
-    notes: 'Installation and format verified. Live autonomous benchmark execution documented for external run.'
-  },
-  cursor: {
-    agentName: 'Cursor',
-    testedVersion: 'latest',
-    verificationLevel: AGENT_VERIFICATION_LEVELS.LEVEL_3_INSTALLATION_VERIFIED,
-    executionMethod: 'Skills CLI installation to .agents/skills/',
-    lastEvaluated: '2026-10-18',
-    notes: 'Installation and format verified. Live autonomous benchmark execution documented for external run.'
-  }
-};
+export const KNOWN_AGENT_PROFILES = Object.fromEntries(
+  AGENT_COMPATIBILITY_RECORDS.map(record => [
+    record.agentId,
+    {
+      agentName: record.agentName,
+      testedVersion: record.testedVersion,
+      verificationLevel: record.highestTier,
+      executionMethod: record.executionMethod,
+      lastEvaluated: record.testedAt,
+      status: record.overallStatus,
+      notes: record.evidence
+    }
+  ])
+);
 
 /**
  * Discovers benchmark cases in the given directory.

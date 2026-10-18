@@ -1,53 +1,13 @@
-export const COMPATIBILITY_DATA = [
-  {
-    agent: "Google Antigravity",
-    scope: "Workspace & Global",
-    mechanism: "Native Plugin (`plugin.json`) / Skills CLI",
-    execution: "Native terminal (`run_command`)",
-    level: "Level 6: Benchmark Completed",
-    badgeType: "badge-lime",
-    statusText: "Directly Verified",
-    testedVersion: "v2.0.0",
-    testDate: "2026-10-18",
-    notes: "Directly executed and verified in Antigravity session: full refinement loop, diff maps, tests, and run persistence verified on disk."
-  },
-  {
-    agent: "Claude Code",
-    scope: "Workspace (`.claude/skills/`)",
-    mechanism: "Skills CLI / Manual copy",
-    execution: "Bash tool execution",
-    level: "Level 3: Installation Verified",
-    badgeType: "badge-dark",
-    statusText: "Installation Verified",
-    testedVersion: "Latest",
-    testDate: "2026-10-18",
-    notes: "Validated against Anthropic Agent Skills spec. Disk placement tested via `npx skills add . -a claude-code`. Live autonomous invocation documented."
-  },
-  {
-    agent: "Cursor",
-    scope: "Workspace (`.agents/skills/`)",
-    mechanism: "Skills CLI / Manual copy",
-    execution: "Terminal tool execution",
-    level: "Level 3: Installation Verified",
-    badgeType: "badge-dark",
-    statusText: "Installation Verified",
-    testedVersion: "Latest",
-    testDate: "2026-10-18",
-    notes: "Validated against open `.agents` standard. Disk placement tested via `npx skills add . -a cursor`. Live autonomous invocation documented."
-  },
-  {
-    agent: "Vercel Skills CLI",
-    scope: "Dynamic Multi-Agent",
-    mechanism: "CLI (`npx skills add <source>`)",
-    execution: "Node.js installer",
-    level: "Level 3: Installation Verified",
-    badgeType: "badge-lime",
-    statusText: "Directly Verified",
-    testedVersion: "v1.0+",
-    testDate: "2026-10-18",
-    notes: "Directly verified executing `npx skills add .` to distribute skills to `.agents/skills` and `.claude/skills`."
-  }
-];
+import { COMPATIBILITY_DATA as RAW_COMPATIBILITY_DATA } from '../data/compatibility-data.js';
+
+export const COMPATIBILITY_DATA = RAW_COMPATIBILITY_DATA.map(item => ({
+  ...item,
+  agent: item.agentName,
+  level: item.highestTier,
+  execution: item.executionMethod,
+  testDate: item.testedAt,
+  notes: item.evidence
+}));
 
 export function renderCompatibilityMatrix(): string {
   return `
@@ -79,15 +39,18 @@ export function renderCompatibilityMatrix(): string {
               ${COMPATIBILITY_DATA.map(row => `
                 <tr>
                   <td>
-                    <strong>${row.agent}</strong>
+                    <strong>${row.agentName}</strong>
+                    <div style="font-size: 0.75rem; color: var(--ink-muted); margin-top: 2px;">
+                      Status: <span class="badge ${row.badgeType}" style="font-size: 0.65rem; padding: 1px 5px;">${row.overallStatus}</span>
+                    </div>
                   </td>
                   <td><code>${row.scope}</code></td>
-                  <td>${row.execution}</td>
+                  <td>${row.executionMethod}</td>
                   <td>
-                    <span class="badge ${row.badgeType}">${row.level}</span>
+                    <span class="badge ${row.badgeType}">${row.highestTier}</span>
                   </td>
-                  <td>${row.testedVersion} (${row.testDate})</td>
-                  <td class="text-secondary" style="font-size: 0.88rem;">${row.notes}</td>
+                  <td>${row.testedVersion} (${row.testedAt})</td>
+                  <td class="text-secondary" style="font-size: 0.88rem;">${row.evidence}</td>
                 </tr>
               `).join('')}
             </tbody>

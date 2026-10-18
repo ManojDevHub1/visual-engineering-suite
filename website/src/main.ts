@@ -183,19 +183,39 @@ function attachEventHandlers() {
 
     modalTitle.textContent = skill.name;
     modalBody.innerHTML = `
-      <p style="margin-bottom: var(--space-4); font-size: 1.05rem;">${skill.description}</p>
+      <div style="display: flex; gap: var(--space-2); margin-bottom: var(--space-3); flex-wrap: wrap;">
+        <span class="badge badge-lime">${skill.implementationStatus.toUpperCase()}</span>
+        <span class="badge badge-dark">CATEGORY: ${skill.category.toUpperCase()}</span>
+      </div>
+      <p style="margin-bottom: var(--space-4); font-size: 1.05rem; color: var(--text-dark-primary);">${skill.description}</p>
+      
       <div class="code-box" style="margin-bottom: var(--space-4);">
         <pre><code>Canonical Path: ${skill.path}</code></pre>
       </div>
 
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-4);">
+        <div>
+          <h4 style="font-size: 0.85rem; color: var(--electric-lime); margin-bottom: var(--space-2);">REQUIRED INPUTS</h4>
+          <ul style="font-size: 0.82rem; padding-left: var(--space-4); margin: 0; color: var(--text-dark-secondary);">
+            ${skill.requiredInputs?.map((inp: string) => `<li>${inp}</li>`).join('') || '<li>Standard visual context</li>'}
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size: 0.85rem; color: var(--electric-lime); margin-bottom: var(--space-2);">EXPECTED OUTPUTS</h4>
+          <ul style="font-size: 0.82rem; padding-left: var(--space-4); margin: 0; color: var(--text-dark-secondary);">
+            ${skill.expectedOutputs?.map((out: string) => `<li>${out}</li>`).join('') || '<li>Verified artifact</li>'}
+          </ul>
+        </div>
+      </div>
+
       <h4>Helper Scripts (${skill.scripts.length})</h4>
       <div class="chip-group" style="margin-bottom: var(--space-4);">
-        ${skill.scripts.length > 0 ? skill.scripts.map(s => `<span class="chip"><code>${s}</code></span>`).join('') : '<span class="text-muted">None</span>'}
+        ${skill.scripts.length > 0 ? skill.scripts.map((s: string) => `<span class="chip"><code>${s}</code></span>`).join('') : '<span class="text-muted">None</span>'}
       </div>
 
       <h4>Reference Schemas & Guides (${skill.references.length})</h4>
       <div class="chip-group">
-        ${skill.references.map(r => `<span class="chip chip-accent">${r}</span>`).join('')}
+        ${skill.references.map((r: string) => `<span class="chip chip-accent">${r}</span>`).join('')}
       </div>
     `;
 

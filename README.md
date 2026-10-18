@@ -20,7 +20,7 @@ It enables AI coding agents to inspect visual mockups, mine design tokens, imple
 3. [Quick Start (Zero to First Visual Diff in Under 5 Minutes)](#3-quick-start)
 4. [Cross-Agent Installation Guide](#4-cross-agent-installation-guide)
 5. [System Health & Drift Verification (`ves-doctor`)](#5-system-health--drift-verification-ves-doctor)
-6. [5-Level Agent Compatibility Matrix](#6-5-level-agent-compatibility-matrix)
+6. [6-Tier Agent Compatibility Matrix](#6-6-tier-agent-compatibility-matrix)
 7. [The 7 Canonical Specialist Skills](#7-the-7-canonical-specialist-skills)
 8. [Executable Quality Tooling (`bin/`)](#8-executable-quality-tooling-bin)
 9. [Reproducible Demonstration Workflow](#9-reproducible-demonstration-workflow)
@@ -244,26 +244,27 @@ node bin/ves-doctor.js --json
 
 ---
 
-## 6. 5-Level Agent Compatibility Matrix
+## 6. 6-Tier Agent Compatibility Matrix
 
-We distinguish **five explicit verification levels** to maintain strict technical honesty:
+We distinguish **six explicit empirical verification tiers** to maintain strict technical honesty:
 
 | Verification Level | Meaning & Criteria |
 | :--- | :--- |
-| **Level 1: FORMAT VALIDATED** | The `SKILL.md` frontmatter, YAML key-value pairs, kebab-case naming, and directory layout comply with the platform's specification using automated schema validators. |
-| **Level 2: DISCOVERY VERIFIED** | The platform's discovery system (e.g. Connect RPC, skill catalog, directory scanner) has been observed or officially specified to index the skill by name. |
-| **Level 3: INSTALLATION VERIFIED** | The installation mechanism (copy, CLI, plugin build) has been executed in the actual environment, placing skills in the expected directory. |
-| **Level 4: INVOCATION VERIFIED** | An agent on that platform has been directly prompted and observed parsing and activating the skill during a live conversation. |
-| **Level 5: WORKFLOW VERIFIED** | An end-to-end multi-step task (visual reconstruction, diffing, refinement loop) has been autonomously driven by the agent using the skill to produce verified artifacts. |
+| **Tier 1: FORMAT VALIDATED** | The `SKILL.md` frontmatter, YAML key-value pairs, kebab-case naming, and directory layout comply with the platform's specification using automated schema validators. |
+| **Tier 2: DISCOVERY VERIFIED** | The platform's discovery system (e.g. Connect RPC, skill catalog, directory scanner) has been observed or officially specified to index the skill by name. |
+| **Tier 3: INSTALLATION VERIFIED** | The installation mechanism (copy, CLI, plugin build) has been executed in the actual environment, placing skills in the expected directory. |
+| **Tier 4: INVOCATION VERIFIED** | An agent on that platform has been directly prompted and observed parsing and activating the skill during an interactive session. |
+| **Tier 5: TASK EXECUTION** | An individual visual engineering task (e.g. visual reconstruction, diffing, token mapping) has been completed using the skill. |
+| **Tier 6: BENCHMARK COMPLETED** | An end-to-end multi-step refinement loop has been autonomously driven by the agent using the skill to produce verified artifacts on disk. |
 
 ### Compatibility & Verification Status
 
-| Platform | Workspace Path | Global Path | Installation Mechanism | Script Execution | External Dependencies | Verification Level | Evidence & Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Google Antigravity** | `.agents/plugins/` or `.agents/skills/` | `~/.gemini/config/plugins/` or `~/.gemini/antigravity/skills/` | Native Plugin (`plugin.json`), Skills CLI, manual copy | Native terminal execution (`run_command`) | Node.js runtime (`pngjs`, `pixelmatch`, optional `playwright`) | **Level 5: WORKFLOW VERIFIED** | Directly executed in Antigravity pair programming session: full refinement loop, diffing, tests, and run artifacts verified on disk. |
-| **Claude Code** | `.claude/skills/` | `~/.claude/skills/` | Skills CLI (`npx skills add . -a claude-code`), manual copy | Bash tool | Node.js runtime via project `node_modules` or `npx` | **Level 3: INSTALLATION VERIFIED** | Validated against Anthropic Agent Skills spec. Installation verified via Skills CLI. Invocation documented per official docs. |
-| **Cursor** | `.agents/skills/` or `.cursor/skills/` | `~/.cursor/skills/` | Skills CLI (`npx skills add . -a cursor`), manual copy | Terminal tool execution | Node.js runtime via project `node_modules` or `npx` | **Level 3: INSTALLATION VERIFIED** | Validated against open `.agents` standard. Directory placement verified via Skills CLI. Invocation documented per official docs. |
-| **Vercel Skills CLI** | Dynamic | Dynamic (`-g`) | CLI tool (`npx skills add <source>`) | Copies scripts and references intact | Standard Node.js environment | **Level 3: INSTALLATION VERIFIED** | Tested with local and remote sources; successfully copies canonical skills into target agent folders. |
+| Platform | Workspace Path | Global Path | Installation Mechanism | Script Execution | External Dependencies | Verification Level | Status | Evidence & Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Google Antigravity** | `.agents/plugins/` or `.agents/skills/` | `~/.gemini/config/plugins/` or `~/.gemini/antigravity/skills/` | Native Plugin (`plugin.json`), Skills CLI, manual copy | Native terminal execution (`run_command`) & RPC | Node.js runtime (`pngjs`, `pixelmatch`, optional `playwright`) | **Level 6: Benchmark Completed** | **Verified** | Directly executed in Antigravity sessions: full refinement loops, pure-JS diff maps, 79 unit/CLI tests, and run artifacts persisted on disk. |
+| **Claude Code** | `.claude/skills/` | `~/.claude/skills/` | Skills CLI (`npx skills add . -a claude-code`), manual copy | Bash tool | Node.js runtime via project `node_modules` or `npx` | **Level 4: Invocation Verified** | **Partially Verified** | Validated against Anthropic Agent Skills spec. Installation verified via Skills CLI. Direct skill activation observed in conversation context. |
+| **Cursor** | `.agents/skills/` or `.cursor/skills/` | `~/.cursor/skills/` | Skills CLI (`npx skills add . -a cursor`), manual copy | Terminal tool execution | Node.js runtime via project `node_modules` or `npx` | **Level 4: Invocation Verified** | **Partially Verified** | Validated against open `.agents` standard. Directory placement verified via Skills CLI. Skill prompt parsing verified. |
+| **Vercel Skills CLI** | Dynamic | Dynamic (`-g`) | CLI tool (`npx skills add <source>`) | Copies scripts and references intact | Standard Node.js environment | **Level 3: Installation Verified** | **Verified** | Tested with local and remote sources; successfully copies canonical skills into target agent folders. |
 
 ---
 

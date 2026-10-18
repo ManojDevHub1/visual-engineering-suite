@@ -15,7 +15,7 @@
     "ves-benchmark": "./bin/ves-benchmark.js"
   },
   "scripts": {
-    "test": "node --test tests/**/*.test.js",
+    "test": "node --test --test-concurrency=1 tests/**/*.test.js",
     "validate": "node bin/ves-validate.js",
     "check-env": "node bin/ves-env.js",
     "check-health": "node bin/ves-doctor.js",
