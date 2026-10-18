@@ -11,7 +11,8 @@
     "ves-screenshot": "./bin/ves-screenshot.js",
     "ves-refine": "./bin/ves-refine.js",
     "ves-doctor": "./bin/ves-doctor.js",
-    "ves-pack": "./bin/ves-pack.js"
+    "ves-pack": "./bin/ves-pack.js",
+    "ves-benchmark": "./bin/ves-benchmark.js"
   },
   "scripts": {
     "test": "node --test tests/**/*.test.js",
@@ -20,7 +21,11 @@
     "check-health": "node bin/ves-doctor.js",
     "doctor": "node bin/ves-doctor.js",
     "pack": "node bin/ves-pack.js",
-    "refine": "node bin/ves-refine.js"
+    "refine": "node bin/ves-refine.js",
+    "benchmark": "node bin/ves-benchmark.js",
+    "benchmark:visual": "node bin/ves-benchmark.js --mode visual",
+    "benchmark:functional": "node bin/ves-benchmark.js --mode functional",
+    "benchmark:validate": "node bin/ves-benchmark.js --mode validate"
   },
   "keywords": [
     "agent-skills",

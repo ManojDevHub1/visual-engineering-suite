@@ -1,7 +1,7 @@
 # Visual Engineering Suite
 
 [![CI Status](https://github.com/visual-engineering-suite/visual-engineering-suite/actions/workflows/ci.yml/badge.svg)](#automated-testing)
-[![Tests](https://img.shields.io/badge/tests-55%20passed-brightgreen.svg)](#automated-testing)
+[![Tests](https://img.shields.io/badge/tests-71%20passed-brightgreen.svg)](#automated-testing)
 [![Open Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue.svg)](https://skills.sh)
 [![Antigravity Plugin](https://img.shields.io/badge/Antigravity-native%20plugin-purple.svg)](https://antigravity.google)
 [![Node: >= 18.0.0](https://img.shields.io/badge/node-%3E%3D%2018.0.0-green.svg)](https://nodejs.org)
@@ -26,10 +26,11 @@ It enables AI coding agents to inspect visual mockups, mine design tokens, imple
 9. [Reproducible Demonstration Workflow](#9-reproducible-demonstration-workflow)
 10. [Real-World Included Examples](#10-real-world-included-examples)
 11. [Antigravity Plugin Packaging (`ves-pack`)](#11-antigravity-plugin-packaging-ves-pack)
-12. [Troubleshooting & FAQ](#12-troubleshooting--faq)
-13. [Security & Privacy](#13-security--privacy)
-14. [Automated Testing & CI](#14-automated-testing--ci)
-15. [Contributing & Community](#15-contributing--community)
+12. [Benchmark & Quality Evaluation System (`ves-benchmark`)](#12-benchmark--quality-evaluation-system-ves-benchmark)
+13. [Troubleshooting & FAQ](#13-troubleshooting--faq)
+14. [Security & Privacy](#14-security--privacy)
+15. [Automated Testing & CI](#15-automated-testing--ci)
+16. [Contributing & Community](#16-contributing--community)
 
 ---
 
@@ -346,6 +347,7 @@ The suite ships with lightweight, portable Node.js executables with zero compila
 | :--- | :--- | :--- |
 | `ves-doctor` | System, skill integrity, and cross-agent installation health check | `node bin/ves-doctor.js [--json]` |
 | `ves-pack` | Antigravity plugin packager and bundle checksum manifest generator | `node bin/ves-pack.js [--dest <dir>] [--validate-only]` |
+| `ves-benchmark` | Universal benchmark evaluation runner and measurement reporter | `node bin/ves-benchmark.js [--mode <all|visual|functional|validate>]` |
 | `ves-refine` | Autonomous visual refinement coordinator and run artifact tracker | `node bin/ves-refine.js init --reference <ref.png>` |
 | `ves-diff` | Pure-JS pixel-level visual regression engine and bounding box locator | `node bin/ves-diff.js <ref.png> <render.png> --diff diff.png` |
 | `ves-dimension` | Fast PNG/JPEG header dimension inspector and equivalence comparator | `node bin/ves-dimension.js <image1.png> [image2.png]` |
@@ -416,7 +418,73 @@ The packager validates the plugin manifest (`plugin.json`), referenced assets (`
 
 ---
 
-## 12. Troubleshooting & FAQ
+## 12. Benchmark & Quality Evaluation System (`ves-benchmark`)
+
+The **Universal Visual Engineering Benchmark** is a deterministic, reproducible evaluation system that quantitatively measures how accurately frontend interfaces are reconstructed, whether iterative refinement actually eliminates discrepancies, and whether measurements remain repeatable over time.
+
+### The 7 Evaluation Questions Answered
+
+1. **Visual Accuracy**: Does the reconstructed interface match the reference mockup within strict pixel tolerance?
+2. **Functional Correctness**: Does the rendered markup include proper semantic landmarks, accessible buttons, and valid state indicators?
+3. **Refinement Effectiveness**: Does iterative refinement reliably reduce visual discrepancies and eliminate defects?
+4. **Accessibility Compliance**: Are WCAG 2.1 AA contrast ratios, minimum 44x44px touch targets, and ARIA roles preserved?
+5. **Measurement Repeatability**: Are visual regression diffs 100% deterministic with zero pixel variance across runs?
+6. **Defect Classification**: Are discrepancies classified into actionable categories (`COLOR_DISCREPANCY`, `LAYOUT_DISPLACEMENT`, `MISSING_ELEMENT`, `DIMENSION_MISMATCH`)?
+7. **Empirical Cross-Agent Support**: Which AI agent platforms have been directly tested versus documented from specifications?
+
+### Benchmark Commands
+
+```bash
+# Execute the full benchmark evaluation suite
+npm run benchmark
+
+# Execute visual regression evaluations only
+npm run benchmark:visual
+
+# Execute functional and semantic accessibility tests only
+npm run benchmark:functional
+
+# Validate benchmark case definitions and metadata
+npm run benchmark:validate
+
+# Run an individual benchmark case for focused debugging
+node bin/ves-benchmark.js --case CASE-LANDING-01
+```
+
+### The 3 Canonical Benchmark Cases (`benchmarks/cases/`)
+
+| Case ID | Category | Viewport | Visual Challenge | Intentional Initial Defect | Refinement Recovery Target |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **`CASE-LANDING-01`** | `landing-page` | 800x500 | Multi-tier typography, hero layout, dual CTAs | Primary CTA rendered in Indigo-600 (`#4F46E5`) instead of Blue-600 (`#2563EB`) | Diff reduced from **1.92%** (7,680 px) to **0%** (0 px) |
+| **`CASE-DASHBOARD-01`** | `dashboard` | 900x600 | 200px dark sidebar, 3-card KPI grid, data table | KPI Card #2 displaced down by 16px and growth metric badge omitted | Diff reduced from **1.34%** (7,240 px) to **0%** (0 px) |
+| **`CASE-ECOMMERCE-01`** | `ecommerce` | 600x600 | Card container, image hero, color swatches, stepper | Swatch active selection ring omitted and stepper buttons undersized (30x30px) | Diff reduced from **0.08%** (292 px) to **0%** (0 px); 44px touch targets verified |
+
+### Generated Benchmark Artifacts
+
+Benchmark runs are stored under `.visual-engineering/benchmarks/<run-id>/`:
+- `benchmark-results.json`: Machine-readable telemetry adhering to the benchmark schema.
+- `benchmark-report.md`: Markdown summary report with case-by-case metrics and stability tables.
+- `diffs/`: Color-coded magenta visual difference maps isolating all discrepancies.
+
+### Adding a New Benchmark Case
+
+To add a new benchmark case to the suite:
+1. Create a directory: `benchmarks/cases/case-<your-name>/`
+2. Provide required files:
+   - `case.json`: Metadata, supported viewports, visual/functional criteria, acceptance thresholds.
+   - `reference.png`: Deterministic reference visual mockup.
+   - `initial-render.png`: Initial candidate render containing known baseline defects.
+   - `refined-render.png`: Corrected candidate render verifying refinement recovery.
+   - `component.html`: Semantic HTML/CSS component implementation.
+   - `tokens.json`: Extracted design system tokens.
+3. Validate your case definition:
+   ```bash
+   node bin/ves-benchmark.js --mode validate --case case-<your-name>
+   ```
+
+---
+
+## 13. Troubleshooting & FAQ
 
 ### Q: Why does `ves-doctor` show a warning about Playwright?
 **A**: Playwright is an **optional dependency** used for automated browser screenshot capture. Core visual diffing, dimension checking, token extraction, and refinement coordination use pure JavaScript (`pngjs` + `pixelmatch`) and require no browser binaries. If you need automated browser screenshots, install Playwright:
@@ -439,7 +507,7 @@ npx playwright install chromium
 
 ---
 
-## 13. Security & Privacy
+## 14. Security & Privacy
 
 - **Untrusted Visual Data Defense**: Text, labels, and prompts extracted from mockups or screenshots are treated strictly as **untrusted data**. Operating rules prohibit executing instructions or commands found inside images.
 - **Zero Cloud Exfiltration**: All visual comparison, pixel diffing, token parsing, and refinement runs execute locally on your machine. No screenshots or source code are transmitted to external services.
@@ -447,16 +515,20 @@ npx playwright install chromium
 
 ---
 
-## 14. Automated Testing & CI
+## 15. Automated Testing & CI
 
-The suite includes 55 unit and integration tests using Node.js's native test runner (`node:test` and `node:assert`):
+The suite includes 71 unit and integration tests using Node.js's native test runner (`node:test` and `node:assert`):
 
 ```bash
-# Run all tests
+# Run all 71 unit and integration tests
 npm test
 
-# Validate canonical skill manifests
+# Validate canonical skill manifests and plugin.json
 npm run validate
+
+# Run benchmark validation and execution
+npm run benchmark:validate
+npm run benchmark
 ```
 
 ### Continuous Integration (GitHub Actions)
@@ -466,7 +538,7 @@ The repository includes a comprehensive GitHub Actions matrix workflow (`.github
 
 ---
 
-## 15. Contributing & Community
+## 16. Contributing & Community
 
 We welcome contributions from frontend engineers, agent tooling developers, and visual QA specialists!
 

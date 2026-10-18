@@ -1,0 +1,70 @@
+{
+  "id": "CASE-LANDING-01",
+  "name": "SaaS Landing Page Hero Section",
+  "category": "landing-page",
+  "version": "1.0.0",
+  "description": "Evaluate visual hierarchy, typography ladder, spacing alignment, CTA placement, and navigation landmarks on a modern dark-theme hero section.",
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 800,
+      "height": 500
+    }
+  ],
+  "requirements": {
+    "visual": [
+      "Header bar height 56px with aligned logo and 3 navigation links",
+      "Announcement badge pill at x: 48, y: 96",
+      "Two-tier typography ladder: bold headline (32px) and muted subtitle (16px)",
+      "Primary CTA button with blue-600 (#2563EB) background, size 160x48px",
+      "Secondary CTA button with border outline, size 144x48px",
+      "Hero visual container card at x: 500, y: 96, size 252x284px"
+    ],
+    "functional": [
+      "Navigation landmarks present with semantic <header> and <nav> tags",
+      "All interactive buttons and links have accessible names",
+      "No uncaught JavaScript errors or broken internal anchors"
+    ],
+    "accessibility": [
+      "Color contrast on primary CTA text exceeds WCAG 2.1 AA 4.5:1",
+      "Touch targets for CTAs satisfy minimum 44x44px",
+      "Visible focus state specified for keyboard navigation"
+    ]
+  },
+  "acceptanceCriteria": {
+    "maxDiffPercentage": 0.1,
+    "maxDiffPixels": 100,
+    "colorThreshold": 0.1,
+    "requiredSemanticTags": [
+      "header",
+      "nav",
+      "main",
+      "button"
+    ],
+    "minTouchTargetPx": 44,
+    "minContrastRatio": 4.5
+  },
+  "expectedOutcomes": {
+    "initialRender": {
+      "expectedDiffPercentRange": [
+        1.5,
+        2.5
+      ],
+      "expectedDefects": [
+        "COLOR_DISCREPANCY"
+      ],
+      "description": "Primary CTA button rendered with incorrect theme color (Indigo-600 #4F46E5 instead of Blue-600 #2563EB)"
+    },
+    "refinedRender": {
+      "expectedDiffPercentRange": [
+        0,
+        0.05
+      ],
+      "maxDiffPixels": 50,
+      "expectedDefects": []
+    }
+  },
+  "knownLimitations": [
+    "Operating system font antialiasing variations require comparison threshold 0.1."
+  ]
+}

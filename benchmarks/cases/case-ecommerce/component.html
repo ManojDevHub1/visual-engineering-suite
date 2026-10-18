@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Card Component</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 600px; }
+    article { width: 380px; height: 520px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+    figure { width: 340px; height: 230px; background: #0f172a; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .product-graphic { width: 80px; height: 90px; background: #38bdf8; border-radius: 6px; }
+    h2 { font-size: 18px; font-weight: 700; color: #0f172a; margin-top: 12px; }
+    .price { font-size: 20px; font-weight: 700; color: #2563eb; margin-top: 4px; }
+    .swatches { display: flex; gap: 12px; align-items: center; margin-top: 12px; }
+    .swatch { width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer; position: relative; }
+    .swatch[aria-checked="true"]::after { content: ''; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border: 2px solid #2563eb; border-radius: 50%; }
+    .swatch-1 { background: #1e293b; }
+    .swatch-2 { background: #2563eb; }
+    .swatch-3 { background: #94a3b8; }
+    .stepper-container { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
+    .stepper { display: flex; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; }
+    .stepper-btn { width: 44px; height: 44px; background: #e2e8f0; border: none; font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .stepper-val { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; background: #f8fafc; }
+    .btn-add { width: 340px; height: 50px; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <article>
+    <figure>
+      <div class="product-graphic" role="img" aria-label="Wireless ANC Headphones Image"></div>
+    </figure>
+    <div>
+      <h2>Pro Wireless ANC Headphones</h2>
+      <div class="price">$249.00</div>
+      <div class="swatches" role="radiogroup" aria-label="Color Options">
+        <button class="swatch swatch-1" role="radio" aria-checked="false" aria-label="Obsidian" type="button"></button>
+        <button class="swatch swatch-2" role="radio" aria-checked="true" aria-label="Cobalt Blue" type="button"></button>
+        <button class="swatch swatch-3" role="radio" aria-checked="false" aria-label="Silver" type="button"></button>
+      </div>
+      <div class="stepper-container">
+        <div class="stepper" role="group" aria-label="Quantity Selection">
+          <button class="stepper-btn" type="button" aria-label="Decrease quantity">-</button>
+          <span class="stepper-val" aria-live="polite">1</span>
+          <button class="stepper-btn" type="button" aria-label="Increase quantity">+</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-add" type="button">Add to Cart</button>
+  </article>
+</body>
+</html>

@@ -131,5 +131,20 @@ describe('CLI Quality Tools Integration', () => {
     assert.strictEqual(parsed.valid, true);
     assert.strictEqual(parsed.skillsCount, 7);
   });
+
+  test('ves-benchmark runs full benchmark suite and exits with code 0', () => {
+    const res = runCli('bin/ves-benchmark.js --json');
+    assert.strictEqual(res.code, 0);
+    const parsed = JSON.parse(res.stdout);
+    assert.strictEqual(parsed.summary.totalCases, 3);
+    assert.strictEqual(parsed.summary.passedCases, 3);
+    assert.strictEqual(parsed.summary.exitCode, 0);
+  });
+
+  test('ves-benchmark exits with code 2 on invalid mode', () => {
+    const res = runCli('bin/ves-benchmark.js --mode non-existent --json');
+    assert.strictEqual(res.code, 2);
+  });
 });
+
 

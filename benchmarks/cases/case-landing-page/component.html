@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SaaS Hero Component</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; }
+    header { height: 56px; background: #1e293b; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+    .logo { width: 64px; height: 24px; background: #38bdf8; border-radius: 4px; }
+    nav a { color: #94a3b8; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    main { padding: 40px 48px; display: flex; justify-content: space-between; }
+    .badge { display: inline-block; background: #0284c7; color: #ffffff; padding: 4px 12px; border-radius: 9999px; font-size: 12px; margin-bottom: 16px; }
+    h1 { font-size: 32px; line-height: 1.25; margin-bottom: 16px; max-width: 412px; }
+    p { font-size: 16px; color: #94a3b8; margin-bottom: 32px; max-width: 352px; }
+    .btn-group { display: flex; gap: 16px; }
+    .btn-primary { width: 160px; height: 48px; background: #2563eb; color: #ffffff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .btn-secondary { width: 144px; height: 48px; background: transparent; border: 1px solid #334155; color: #f8fafc; border-radius: 6px; font-weight: 500; cursor: pointer; }
+    .hero-card { width: 252px; height: 284px; background: #1e293b; border-radius: 8px; border: 1px solid #334155; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" role="img" aria-label="Acme Logo"></div>
+    <nav aria-label="Main Navigation">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#docs">Docs</a>
+    </nav>
+  </header>
+  <main>
+    <div>
+      <span class="badge">New Release v2.0</span>
+      <h1>Build faster with verified agent visual skills</h1>
+      <p>Continuous closed-loop visual regression engineering for enterprise frontend teams.</p>
+      <div class="btn-group">
+        <button class="btn-primary" type="button">Get Started</button>
+        <button class="btn-secondary" type="button">Documentation</button>
+      </div>
+    </div>
+    <div class="hero-card" role="region" aria-label="Interactive preview"></div>
+  </main>
+</body>
+</html>

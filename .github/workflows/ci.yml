@@ -41,7 +41,14 @@ jobs:
       - name: Run plugin packager validation
         run: npm run pack
 
+      - name: Run benchmark cases validation
+        run: npm run benchmark:validate
+
+      - name: Run deterministic benchmark suite
+        run: npm run benchmark
+
       - name: Run system doctor check (warning allowed due to optional playwright)
         run: |
           node bin/ves-doctor.js || if [ $? -le 1 ]; then exit 0; else exit 1; fi
         shell: bash
+

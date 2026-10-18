@@ -1,0 +1,70 @@
+{
+  "id": "CASE-ECOMMERCE-01",
+  "name": "Responsive Product Detail Card",
+  "category": "ecommerce",
+  "version": "1.0.0",
+  "description": "Evaluate product card layout, image presentation, accessible color swatch radio group, touch-target compliance, and action buttons.",
+  "viewports": [
+    {
+      "name": "mobile-desktop-card",
+      "width": 600,
+      "height": 600
+    }
+  ],
+  "requirements": {
+    "visual": [
+      "Product container card centered at x: 110px with width 380px and height 520px",
+      "Hero product preview image area 340x230px with balanced margins",
+      "Color swatch selection group with 3 swatches; active swatch visually denoted with outline ring",
+      "Quantity stepper buttons meet minimum 44x44px touch targets",
+      "Prominent Add to Cart CTA button with height 50px and primary brand color #2563EB"
+    ],
+    "functional": [
+      "Card structured using semantic <article> with <figure> for media",
+      "Color swatches use role='radiogroup' and individual role='radio' with aria-checked",
+      "Quantity stepper controls have accessible names (Decrease quantity, Increase quantity)",
+      "Add to cart button handles disabled/loading state indicators"
+    ],
+    "accessibility": [
+      "Active swatch state communicated programmatically via aria-checked='true'",
+      "Touch targets for stepper controls meet or exceed 44x44px",
+      "Text color contrast meets WCAG 2.1 AA requirement"
+    ]
+  },
+  "acceptanceCriteria": {
+    "maxDiffPercentage": 0.1,
+    "maxDiffPixels": 120,
+    "colorThreshold": 0.1,
+    "requiredSemanticTags": [
+      "article",
+      "figure",
+      "button"
+    ],
+    "minTouchTargetPx": 44,
+    "minContrastRatio": 4.5
+  },
+  "expectedOutcomes": {
+    "initialRender": {
+      "expectedDiffPercentRange": [
+        0.8,
+        2
+      ],
+      "expectedDefects": [
+        "COLOR_DISCREPANCY",
+        "LAYOUT_DISPLACEMENT"
+      ],
+      "description": "Active swatch ring omitted and stepper touch targets undersized (30x30px vs required 44x44px)"
+    },
+    "refinedRender": {
+      "expectedDiffPercentRange": [
+        0,
+        0.05
+      ],
+      "maxDiffPixels": 50,
+      "expectedDefects": []
+    }
+  },
+  "knownLimitations": [
+    "Image compression artifacts must be masked when testing external JPEG assets."
+  ]
+}

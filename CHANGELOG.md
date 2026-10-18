@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-10-18
+
+### Added
+- **Benchmark & Quality Evaluation System (`src/benchmark.js` & `bin/ves-benchmark.js`)**:
+  - Deterministic evaluation harness measuring visual reconstruction fidelity, functional correctness, iterative refinement effectiveness, and measurement repeatability.
+  - NPM benchmark runners: `npm run benchmark`, `npm run benchmark:visual`, `npm run benchmark:functional`, `npm run benchmark:validate`.
+  - Built-in benchmark dataset with 3 local, non-copyrighted UI categories (`benchmarks/cases/`):
+    - `case-landing-page`: SaaS landing hero evaluating typography, alignment, CTA placement, and color shift recovery.
+    - `case-dashboard`: Executive analytics dashboard evaluating sidebar layout, 3 KPI cards, table semantics, and layout displacement/missing badge recovery.
+    - `case-ecommerce`: Responsive product card evaluating swatch radio groups, 44x44px touch targets, and active selection ring recovery.
+  - Refinement delta engine computing initial vs refined discrepancies, absolute pixels eliminated, and relative improvement percentages.
+  - Repeatability and measurement stability auditor measuring pixel variance across multiple runs (100% deterministic, 0 px variance).
+  - Multi-agent empirical evaluation profiles tracking 6 explicit verification levels.
+  - Output artifacts under `.visual-engineering/benchmarks/<run-id>/` including `benchmark-results.json`, `benchmark-report.md`, and visual diff maps.
+- **Automated Testing & CI Integration**:
+  - 16 new automated tests in `tests/benchmark.test.js` and `tests/cli.test.js` bringing test suite to 71 passing tests across 14 suites.
+  - CI workflow updated with automated benchmark validation and test execution across Ubuntu, macOS, and Windows.
+
 ## [1.0.0] - 2026-10-18
 
 ### Added

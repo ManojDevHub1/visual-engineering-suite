@@ -1,0 +1,74 @@
+{
+  "id": "CASE-DASHBOARD-01",
+  "name": "Executive Analytics Dashboard",
+  "category": "dashboard",
+  "version": "1.0.0",
+  "description": "Evaluate multi-column layout integrity, KPI card grid alignment, data table semantics, and state indicators.",
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 900,
+      "height": 600
+    }
+  ],
+  "requirements": {
+    "visual": [
+      "Fixed-width dark sidebar (200px) with logo and navigation items",
+      "Top header bar height 64px with title and filter action",
+      "3 KPI metric cards horizontally aligned at y: 96px with width 200px and height 110px",
+      "Metric indicator badges present with appropriate status colors (green/blue)",
+      "Structured data table container (640x324px) with shaded header row"
+    ],
+    "functional": [
+      "Semantic layout using <aside> for sidebar and <main> for dashboard content",
+      "Data presented in semantic <table> structure with <thead> and <tbody>",
+      "All KPI cards have accessible headings"
+    ],
+    "accessibility": [
+      "WCAG 2.1 AA text contrast satisfied across light and dark panels",
+      "Table column headers use scope='col'",
+      "Filter controls have accessible labels"
+    ]
+  },
+  "acceptanceCriteria": {
+    "maxDiffPercentage": 0.1,
+    "maxDiffPixels": 150,
+    "colorThreshold": 0.1,
+    "requiredSemanticTags": [
+      "aside",
+      "main",
+      "header",
+      "table",
+      "thead",
+      "tbody",
+      "th",
+      "td"
+    ],
+    "minTouchTargetPx": 44,
+    "minContrastRatio": 4.5
+  },
+  "expectedOutcomes": {
+    "initialRender": {
+      "expectedDiffPercentRange": [
+        2,
+        4
+      ],
+      "expectedDefects": [
+        "LAYOUT_DISPLACEMENT",
+        "MISSING_ELEMENT"
+      ],
+      "description": "KPI Card #2 vertically displaced by 16px and growth metric badge omitted"
+    },
+    "refinedRender": {
+      "expectedDiffPercentRange": [
+        0,
+        0.05
+      ],
+      "maxDiffPixels": 50,
+      "expectedDefects": []
+    }
+  },
+  "knownLimitations": [
+    "Dynamic data timestamps must be frozen in visual regression tests."
+  ]
+}
