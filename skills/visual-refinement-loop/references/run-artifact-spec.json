@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RefinementRunSpec",
+  "description": "Specification for local run artifacts stored under .visual-engineering/runs/<run-id>/",
+  "type": "object",
+  "required": ["runId", "createdAt", "status", "maxIterations", "reference", "acceptanceCriteria", "iterations"],
+  "properties": {
+    "runId": { "type": "string" },
+    "createdAt": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["INITIALIZED", "IN_PROGRESS", "COMPLETED_SUCCESS", "COMPLETED_LIMIT_REACHED", "HALTED_TEST_FAILURE", "HALTED_STAGNATION", "HALTED_REGRESSION"]
+    },
+    "targetUrl": { "type": "string" },
+    "maxIterations": { "type": "number", "default": 3 },
+    "reference": {
+      "type": "object",
+      "required": ["originalPath", "savedPath", "dimensions"],
+      "properties": {
+        "originalPath": { "type": "string" },
+        "savedPath": { "type": "string" },
+        "dimensions": {
+          "type": "object",
+          "properties": {
+            "width": { "type": "number" },
+            "height": { "type": "number" },
+            "format": { "type": "string" }
+          }
+        }
+      }
+    },
+    "acceptanceCriteria": {
+      "type": "object",
+      "properties": {
+        "maxDiffPercentage": { "type": "number" },
+        "maxDiffPixels": { "type": "number" },
+        "allowTestFailures": { "type": "boolean" },
+        "allowConsoleErrors": { "type": "boolean" },
+        "requiredElements": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "iterations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["iteration", "timestamp", "status", "diff", "issues"],
+        "properties": {
+          "iteration": { "type": "number" },
+          "timestamp": { "type": "string" },
+          "status": { "type": "string" },
+          "candidateScreenshot": { "type": "string" },
+          "diffImage": { "type": "string" },
+          "diff": { "type": "object" },
+          "deltaFromPrev": { "type": ["number", "null"] },
+          "issues": { "type": "array" }
+        }
+      }
+    },
+    "finalOutcome": {
+      "type": ["object", "null"],
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" },
+        "recommendation": { "type": "string" }
+      }
+    }
+  }
+}

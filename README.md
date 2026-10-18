@@ -1,6 +1,6 @@
 # Visual Engineering Suite
 
-[![Tests](https://img.shields.io/badge/tests-30%20passed-brightgreen.svg)](#automated-testing)
+[![Tests](https://img.shields.io/badge/tests-44%20passed-brightgreen.svg)](#automated-testing)
 [![Open Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue.svg)](https://skills.sh)
 [![Antigravity Plugin](https://img.shields.io/badge/Antigravity-native%20plugin-purple.svg)](https://antigravity.google)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -48,9 +48,9 @@ flowchart LR
 
 ---
 
-## 3. The 6 Specialist Skills
+## 3. The 7 Specialist Skills
 
-The suite organizes visual engineering into six focused, single-responsibility skills:
+The suite organizes visual engineering into seven focused, single-responsibility skills:
 
 ### 1. `visual-reconstruction`
 - **When to activate**: When provided a mockup, screenshot, or URL that needs to be reconstructed into code.
@@ -81,6 +81,11 @@ The suite organizes visual engineering into six focused, single-responsibility s
 - **When to activate**: When verifying compliance with accessibility standards and responsive reflow rules.
 - **Responsibilities**: Scans for missing `alt` attributes, unlabelled buttons, and removed focus outlines; verifies WCAG 2.1 AA color contrast (≥4.5:1); checks touch targets (≥44x44px); and tests reflow down to 320px.
 - **Artifacts**: [wcag-checklist.md](./skills/accessibility-performance-audit/references/wcag-checklist.md), [responsive-reflow-guide.md](./skills/accessibility-performance-audit/references/responsive-reflow-guide.md).
+
+### 7. `visual-refinement-loop`
+- **When to activate**: When coordinating an end-to-end multi-step refinement loop with configurable iteration limits, early termination, and automated run artifact generation.
+- **Responsibilities**: Drives the complete closed-loop cycle (`REFERENCE → ANALYSIS → IMPLEMENTATION → RENDER → DIFF → TRIAGE → FIX → VERIFY → REPORT`). Enforces a strict iteration limit (default: 3), halts on test regressions or stagnation, and stores run records under `.visual-engineering/runs/<run-id>/`.
+- **Artifacts**: [refinement-protocol.md](./skills/visual-refinement-loop/references/refinement-protocol.md), [acceptance-criteria-guide.md](./skills/visual-refinement-loop/references/acceptance-criteria-guide.md), [run-artifact-spec.json](./skills/visual-refinement-loop/references/run-artifact-spec.json).
 
 ---
 
@@ -158,6 +163,22 @@ node bin/ves-screenshot.js <url> <outputPath> --preset desktop [--json]
 ```
 *(Requires optional dependency: `npm i -D playwright`)*
 
+### `ves-refine` — Visual Refinement Engine Coordinator
+Coordinates the multi-iteration visual refinement loop, enforcing configurable iteration caps, early termination on criteria satisfaction, stagnation detection, and saving local run artifacts under `.visual-engineering/runs/<run-id>/`.
+```bash
+# Initialize a refinement run
+node bin/ves-refine.js init --reference <ref.png> --max-iterations 3 --max-diff 0.5 [--json]
+
+# Record an iteration step
+node bin/ves-refine.js step --run <runId> --rendered <candidate.png> [--threshold 0.1] [--test-passed true] [--json]
+
+# Combined single evaluation
+node bin/ves-refine.js run --reference <ref.png> --rendered <candidate.png> [--max-diff 0.5] [--json]
+
+# Check run history and summary
+node bin/ves-refine.js status --run <runId>
+```
+
 ---
 
 ## 7. Minimal Reproducible Example
@@ -228,13 +249,13 @@ To maintain engineering integrity, we document the following transparent limitat
 
 ## 11. Automated Testing
 
-The suite includes 30 unit and integration tests using Node.js's native test runner:
+The suite includes 44 unit and integration tests using Node.js's native test runner (`node:test` and `node:assert`):
 
 ```bash
 npm test
 ```
 
-All 30 tests pass out of the box with zero external test framework overhead.
+All 44 tests pass out of the box covering CLI tools, visual diffing, dimension matching, manifest validation, iteration limits, stagnation detection, and refinement run persistence with zero external test framework overhead.
 
 ---
 

@@ -5,6 +5,7 @@ skills-lock.json
 
 # Test outputs
 tests/output/
+.visual-engineering/
 
 # OS and Editor files
 .DS_Store

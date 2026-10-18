@@ -8,12 +8,14 @@
     "ves-validate": "./bin/ves-validate.js",
     "ves-dimension": "./bin/ves-dimension.js",
     "ves-diff": "./bin/ves-diff.js",
-    "ves-screenshot": "./bin/ves-screenshot.js"
+    "ves-screenshot": "./bin/ves-screenshot.js",
+    "ves-refine": "./bin/ves-refine.js"
   },
   "scripts": {
     "test": "node --test tests/**/*.test.js",
     "validate": "node bin/ves-validate.js",
-    "check-env": "node bin/ves-env.js"
+    "check-env": "node bin/ves-env.js",
+    "refine": "node bin/ves-refine.js"
   },
   "keywords": [
     "agent-skills",
