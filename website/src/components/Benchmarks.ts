@@ -89,7 +89,7 @@ export function renderBenchmarks(): string {
                     <td><code class="viewport-code">${c.viewport}</code></td>
                     <td><span class="diff-bad">${c.initialDiff}</span></td>
                     <td><span class="diff-good">${c.refinedDiff}</span></td>
-                    <td><strong class="eliminated-strong">${c.pixelsEliminated.toLocaleString()} px (${c.reductionPercent})</strong></td>
+                    <td><strong class="eliminated-strong">${(c.pixelsEliminated ?? 0).toLocaleString()} px (${c.reductionPercent})</strong></td>
                     <td><code class="score-code">${c.functionalScore}</code></td>
                     <td><span class="badge badge-dark">${c.defectCategory}</span></td>
                     <td><span class="badge badge-lime">PASS &#10003;</span></td>

@@ -67,6 +67,12 @@ export function renderSkillsDirectory(): string {
           }).join('')}
         </div>
 
+        <!-- Accessible Search Empty State Container -->
+        <div id="skill-empty-state" class="skill-empty-state card card-dark" hidden style="text-align: center; padding: var(--space-8); margin-top: var(--space-4);">
+          <p style="color: var(--text-dark-secondary); margin-bottom: var(--space-3);">No canonical skills match your search query.</p>
+          <button type="button" id="skill-reset-btn" class="btn btn-secondary btn-sm">Reset Search Filter</button>
+        </div>
+
         <!-- Detail Modal Container (Controlled via JS) -->
         <div id="skill-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="modal-skill-title">
           <div class="modal-card card card-dark">

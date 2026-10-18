@@ -162,7 +162,7 @@ export function renderHero(): string {
                     </svg>
                   </div>
                 </div>
-                <input type="range" id="split-slider-range" min="0" max="100" value="50" class="slider-input" aria-label="Slide to compare reference ground truth against rendered implementation" />
+                <input type="range" id="split-slider-range" min="0" max="100" value="50" class="slider-input" aria-label="Slide to compare reference ground truth against rendered implementation" aria-valuetext="50% Reference ground truth, 50% Rendered implementation" />
               </div>
             </div>
 

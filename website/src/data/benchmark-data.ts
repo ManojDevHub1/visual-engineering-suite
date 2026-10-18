@@ -170,8 +170,8 @@ export const BENCHMARK_CASES: BenchmarkCaseMetadata[] = [
 ];
 
 export const BENCHMARK_LATEST_METRICS = {
-  "runId": "benchmark-run-1792315395913-922ea470",
-  "executedAt": "2026-10-18T09:23:15.926Z",
+  "runId": "benchmark-run-1792317000830-a125cf0c",
+  "executedAt": "2026-10-18T09:50:01.696Z",
   "environment": {
     "nodeVersion": "v24.19.0",
     "platform": "win32",
@@ -187,26 +187,26 @@ export const BENCHMARK_LATEST_METRICS = {
       "id": "CASE-DASHBOARD-01",
       "name": "Executive Analytics Dashboard",
       "category": "dashboard",
-      "viewport": "800x500",
-      "initialDiff": "0.00% (0 px)",
+      "viewport": "900x600",
+      "initialDiff": "1.34% (7,240 px)",
       "refinedDiff": "0.00% (0 px)",
-      "pixelsEliminated": 0,
-      "reductionPercent": "-0.00%",
-      "functionalScore": "Passed",
-      "defectCategory": "LAYOUT_DISPLACEMENT",
+      "pixelsEliminated": 7240,
+      "reductionPercent": "-1.34%",
+      "functionalScore": "11/11 passed",
+      "defectCategory": "COLOR_DISCREPANCY",
       "status": "PASS"
     },
     {
       "id": "CASE-ECOMMERCE-01",
       "name": "Responsive Product Detail Card",
       "category": "ecommerce",
-      "viewport": "800x500",
-      "initialDiff": "0.00% (0 px)",
+      "viewport": "600x600",
+      "initialDiff": "0.08% (292 px)",
       "refinedDiff": "0.00% (0 px)",
-      "pixelsEliminated": 0,
-      "reductionPercent": "-0.00%",
-      "functionalScore": "Passed",
-      "defectCategory": "LAYOUT_DISPLACEMENT",
+      "pixelsEliminated": 292,
+      "reductionPercent": "-0.08%",
+      "functionalScore": "6/6 passed",
+      "defectCategory": "MINOR_STYLING",
       "status": "PASS"
     },
     {
@@ -214,12 +214,12 @@ export const BENCHMARK_LATEST_METRICS = {
       "name": "SaaS Landing Page Hero Section",
       "category": "landing-page",
       "viewport": "800x500",
-      "initialDiff": "0.00% (0 px)",
+      "initialDiff": "1.92% (7,680 px)",
       "refinedDiff": "0.00% (0 px)",
-      "pixelsEliminated": 0,
-      "reductionPercent": "-0.00%",
-      "functionalScore": "Passed",
-      "defectCategory": "LAYOUT_DISPLACEMENT",
+      "pixelsEliminated": 7680,
+      "reductionPercent": "-1.92%",
+      "functionalScore": "6/6 passed",
+      "defectCategory": "COLOR_DISCREPANCY",
       "status": "PASS"
     }
   ]

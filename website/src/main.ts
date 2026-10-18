@@ -46,8 +46,79 @@ function announceToScreenReader(message: string) {
   }
 }
 
+/**
+ * Reusable accessible tablist manager conforming to WAI-ARIA authoring practices.
+ * Handles arrow key navigation, Home/End keys, tabindex management, and panel visibility.
+ */
+function setupAccessibleTablist(
+  tabs: NodeListOf<Element>,
+  panels: NodeListOf<Element>,
+  getPanelId: (tab: Element) => string,
+  options?: {
+    orientation?: 'horizontal' | 'vertical';
+    onSelect?: (tab: HTMLElement, index: number) => void;
+  }
+) {
+  const tabArray = Array.from(tabs) as HTMLElement[];
+  const orientation = options?.orientation || 'horizontal';
+
+  function activateTab(index: number, shouldFocus = false) {
+    if (index < 0 || index >= tabArray.length) return;
+
+    tabArray.forEach((t, i) => {
+      const isTarget = i === index;
+      t.classList.toggle('active', isTarget);
+      t.setAttribute('aria-selected', String(isTarget));
+      t.setAttribute('tabindex', isTarget ? '0' : '-1');
+
+      const panelId = getPanelId(t);
+      const panel = document.getElementById(panelId);
+      if (panel) {
+        (panel as HTMLElement).hidden = !isTarget;
+        panel.classList.toggle('active', isTarget);
+      }
+    });
+
+    if (shouldFocus) {
+      tabArray[index].focus();
+    }
+    if (options?.onSelect) {
+      options.onSelect(tabArray[index], index);
+    }
+  }
+
+  tabArray.forEach((tab, index) => {
+    tab.addEventListener('click', () => {
+      activateTab(index, false);
+    });
+
+    tab.addEventListener('keydown', (e: KeyboardEvent) => {
+      let nextIndex = -1;
+      const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
+      const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
+
+      if (e.key === nextKey) {
+        nextIndex = (index + 1) % tabArray.length;
+      } else if (e.key === prevKey) {
+        nextIndex = (index - 1 + tabArray.length) % tabArray.length;
+      } else if (e.key === 'Home') {
+        nextIndex = 0;
+      } else if (e.key === 'End') {
+        nextIndex = tabArray.length - 1;
+      }
+
+      if (nextIndex !== -1) {
+        e.preventDefault();
+        activateTab(nextIndex, true);
+      }
+    });
+  });
+
+  return { activateTab, tabArray };
+}
+
 function attachEventHandlers() {
-  // 1. Mobile Navigation Toggle
+  // 1. Mobile Navigation Drawer & Focus Management
   const mobileToggle = document.querySelector('.mobile-toggle') as HTMLButtonElement | null;
   const mobileNav = document.getElementById('mobile-nav');
   const mobileClose = document.querySelector('.mobile-close') as HTMLButtonElement | null;
@@ -58,7 +129,7 @@ function attachEventHandlers() {
     mobileToggle.setAttribute('aria-expanded', String(open));
     document.body.style.overflow = open ? 'hidden' : '';
     if (open) {
-      const firstLink = mobileNav.querySelector('a') as HTMLElement | null;
+      const firstLink = mobileNav.querySelector('a, button') as HTMLElement | null;
       firstLink?.focus();
     } else {
       mobileToggle.focus();
@@ -78,84 +149,73 @@ function attachEventHandlers() {
     }
   });
 
-  // 2. Hero Visual Tab Switcher
-  const visualTabs = document.querySelectorAll('.visual-tab');
-  const visualViews = document.querySelectorAll('.visual-view');
+  // Mobile nav focus trap
+  mobileNav?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Tab') {
+      const focusables = mobileNav.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], input:not([disabled])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
 
-  visualTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.getAttribute('data-target');
-      visualTabs.forEach(t => {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-
-      visualViews.forEach(view => {
-        const isTarget = view.id === `view-${target}`;
-        (view as HTMLElement).hidden = !isTarget;
-        view.classList.toggle('active', isTarget);
-      });
-    });
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 
-  // 2b. Interactive Split Comparison Slider
+  // 2. Hero Visual Tabs Switcher (Accessible WAI-ARIA Tablist)
+  const heroTabs = document.querySelectorAll('.visual-tab');
+  const heroViews = document.querySelectorAll('.visual-view');
+  setupAccessibleTablist(heroTabs, heroViews, (tab) => `view-${tab.getAttribute('data-target')}`, {
+    orientation: 'horizontal'
+  });
+
+  // 2b. Interactive Split Comparison Slider with Real-time Telemetry & Screen Reader State
   const sliderInput = document.getElementById('split-slider-range') as HTMLInputElement | null;
   const sliderOverlay = document.getElementById('slider-overlay');
   const sliderHandle = document.getElementById('slider-handle');
 
   if (sliderInput && sliderOverlay && sliderHandle) {
-    sliderInput.addEventListener('input', () => {
-      const val = sliderInput.value;
+    const updateSlider = (val: string) => {
+      const num = Number(val);
       sliderOverlay.style.width = `${val}%`;
       sliderHandle.style.left = `${val}%`;
+      sliderInput.setAttribute('aria-valuenow', val);
+      sliderInput.setAttribute(
+        'aria-valuetext',
+        `${val}% Reference ground truth, ${100 - num}% Rendered implementation`
+      );
+    };
+
+    sliderInput.addEventListener('input', () => {
+      updateSlider(sliderInput.value);
     });
+    // Initialize aria-valuetext
+    updateSlider(sliderInput.value || '50');
   }
 
-  // 3. Workflow Stepper Navigation
+  // 3. Workflow Stepper Navigation (Accessible Horizontal Tablist)
   const stepNodes = document.querySelectorAll('.step-node');
   const stagePanels = document.querySelectorAll('.stage-panel');
-
-  stepNodes.forEach((node, index) => {
-    node.addEventListener('click', () => {
-      const stepId = node.getAttribute('data-step');
-      stepNodes.forEach(n => {
-        n.classList.remove('active');
-        n.setAttribute('aria-selected', 'false');
-      });
-      node.classList.add('active');
-      node.setAttribute('aria-selected', 'true');
-
-      stagePanels.forEach(p => {
-        const isTarget = p.id === `step-panel-${stepId}`;
-        (p as HTMLElement).hidden = !isTarget;
-        p.classList.toggle('active', isTarget);
-      });
-    });
-
-    // Keyboard navigation (Left / Right Arrow)
-    node.addEventListener('keydown', (e: any) => {
-      let targetIndex = -1;
-      if (e.key === 'ArrowRight') targetIndex = (index + 1) % stepNodes.length;
-      if (e.key === 'ArrowLeft') targetIndex = (index - 1 + stepNodes.length) % stepNodes.length;
-
-      if (targetIndex !== -1) {
-        e.preventDefault();
-        const targetNode = stepNodes[targetIndex] as HTMLButtonElement;
-        targetNode.focus();
-        targetNode.click();
-      }
-    });
+  setupAccessibleTablist(stepNodes, stagePanels, (node) => `step-panel-${node.getAttribute('data-step')}`, {
+    orientation: 'horizontal'
   });
 
-  // 4. Skills Directory Search & Modal
+  // 4. Skills Directory Search, Empty State & Modal
   const skillSearch = document.getElementById('skill-search') as HTMLInputElement | null;
   const skillCards = document.querySelectorAll('.skill-card');
   const skillCountBadge = document.getElementById('skill-count');
+  const skillEmptyState = document.getElementById('skill-empty-state');
+  const skillResetBtn = document.getElementById('skill-reset-btn');
 
-  skillSearch?.addEventListener('input', () => {
-    const q = skillSearch.value.trim().toLowerCase();
+  function filterSkills(queryText: string) {
+    const q = queryText.trim().toLowerCase();
     let visibleCount = 0;
 
     skillCards.forEach(card => {
@@ -169,17 +229,37 @@ function attachEventHandlers() {
     if (skillCountBadge) {
       skillCountBadge.textContent = `${visibleCount} of ${CANONICAL_SKILLS.length} skills`;
     }
+
+    if (skillEmptyState) {
+      skillEmptyState.hidden = visibleCount > 0;
+    }
+  }
+
+  skillSearch?.addEventListener('input', () => {
+    filterSkills(skillSearch.value);
   });
 
-  // Skill Detail Modal
+  skillResetBtn?.addEventListener('click', () => {
+    if (skillSearch) {
+      skillSearch.value = '';
+      filterSkills('');
+      skillSearch.focus();
+    }
+  });
+
+  // Skill Detail Modal with Accessible Focus Trap & Restoration
   const modal = document.getElementById('skill-modal');
   const modalTitle = document.getElementById('modal-skill-title');
   const modalBody = document.getElementById('modal-skill-body');
-  const modalClose = document.querySelector('.modal-close');
+  const modalClose = document.querySelector('.modal-close') as HTMLElement | null;
+  const mainContent = document.getElementById('main-content');
+  let lastFocusedElement: HTMLElement | null = null;
 
   function openSkillModal(skillName: string) {
     const skill = CANONICAL_SKILLS.find(s => s.name === skillName);
     if (!skill || !modal || !modalTitle || !modalBody) return;
+
+    lastFocusedElement = document.activeElement as HTMLElement;
 
     modalTitle.textContent = skill.name;
     modalBody.innerHTML = `
@@ -221,13 +301,18 @@ function attachEventHandlers() {
 
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
-    (modalClose as HTMLElement)?.focus();
+    if (mainContent) mainContent.setAttribute('aria-hidden', 'true');
+    modalClose?.focus();
+    announceToScreenReader(`Viewing specification modal for skill ${skill.name}`);
   }
 
   function closeSkillModal() {
-    if (!modal) return;
+    if (!modal || modal.hidden) return;
     modal.hidden = true;
     document.body.style.overflow = '';
+    if (mainContent) mainContent.removeAttribute('aria-hidden');
+    lastFocusedElement?.focus();
+    lastFocusedElement = null;
   }
 
   document.querySelectorAll('.skill-detail-btn').forEach(btn => {
@@ -248,51 +333,41 @@ function attachEventHandlers() {
     }
   });
 
-  // 5. Installation Platform Tabs
+  // Modal focus trap for keyboard users
+  modal?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Tab') {
+      const focusables = modal.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  // 5. Installation Platform Tabs (Accessible Horizontal Tablist)
   const installTabs = document.querySelectorAll('.install-tab');
   const installPanels = document.querySelectorAll('.install-panel');
-
-  installTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const installId = tab.getAttribute('data-install-id');
-      installTabs.forEach(t => {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-
-      installPanels.forEach(p => {
-        const isTarget = p.id === `panel-install-${installId}`;
-        (p as HTMLElement).hidden = !isTarget;
-        p.classList.toggle('active', isTarget);
-      });
-    });
+  setupAccessibleTablist(installTabs, installPanels, (tab) => `panel-install-${tab.getAttribute('data-install-id')}`, {
+    orientation: 'horizontal'
   });
 
-  // 6. Documentation Tabs
+  // 6. Documentation Tabs (Accessible Vertical Tablist)
   const docsTabs = document.querySelectorAll('.docs-nav-item');
   const docsPanels = document.querySelectorAll('.docs-panel');
-
-  docsTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const docId = tab.getAttribute('data-doc-id');
-      docsTabs.forEach(t => {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-
-      docsPanels.forEach(p => {
-        const isTarget = p.id === `panel-doc-${docId}`;
-        (p as HTMLElement).hidden = !isTarget;
-        p.classList.toggle('active', isTarget);
-      });
-    });
+  setupAccessibleTablist(docsTabs, docsPanels, (tab) => `panel-doc-${tab.getAttribute('data-doc-id')}`, {
+    orientation: 'vertical'
   });
 
-  // 7. Clipboard Copy Buttons
+  // 7. Clipboard Copy Buttons with Audio / Visual Feedback
   document.querySelectorAll('[data-copy]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const textToCopy = btn.getAttribute('data-copy') || '';
@@ -328,9 +403,49 @@ function attachEventHandlers() {
       }
     });
   });
+
+  // 8. Deep Linking & Hash Routing Support
+  function handleHashRoute() {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+
+    if (hash.startsWith('docs/')) {
+      const docId = hash.replace('docs/', '');
+      const tab = document.querySelector(`.docs-nav-item[data-doc-id="${docId}"]`) as HTMLElement | null;
+      if (tab) {
+        tab.click();
+        document.getElementById('docs')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (hash.startsWith('install/')) {
+      const installId = hash.replace('install/', '');
+      const tab = document.querySelector(`.install-tab[data-install-id="${installId}"]`) as HTMLElement | null;
+      if (tab) {
+        tab.click();
+        document.getElementById('install')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (hash.startsWith('workflow/')) {
+      const stepId = hash.replace('workflow/', '');
+      const node = document.querySelector(`.step-node[data-step="${stepId}"]`) as HTMLElement | null;
+      if (node) {
+        node.click();
+        document.getElementById('workflow')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (hash.startsWith('skills/')) {
+      const skillName = hash.replace('skills/', '');
+      openSkillModal(skillName);
+    }
+  }
+
+  window.addEventListener('hashchange', handleHashRoute);
+  // Execute after initial layout rendering
+  setTimeout(handleHashRoute, 80);
 }
 
 // Auto-run if running in browser
 if (typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', initApp);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
 }

@@ -183,9 +183,12 @@ export const COMPATIBILITY_DATA: AgentCompatibilityItem[] = ${JSON.stringify(AGE
       if (fs.existsSync(resPath)) {
         try {
           const parsed = JSON.parse(await fs.promises.readFile(resPath, 'utf8'));
-          if (parsed.cases && parsed.cases.length > 0) {
+          if (parsed.cases && parsed.cases.length > 0 && parsed.cases.some(c => c.visual?.initial)) {
             latestRun = parsed;
             break;
+          } else if (!latestRun && parsed.cases && parsed.cases.length > 0) {
+            // Store as fallback if no run with visual diffs is found
+            latestRun = parsed;
           }
         } catch {
           // ignore corrupted run, try next
@@ -211,7 +214,7 @@ export const COMPATIBILITY_DATA: AgentCompatibilityItem[] = ${JSON.stringify(AGE
     formattedCases = latestRun.cases.map(c => {
       const initDiffPercent = c.visual?.initial ? `${c.visual.initial.diffPercentage.toFixed(2)}% (${c.visual.initial.diffPixels.toLocaleString()} px)` : '0.00% (0 px)';
       const refnDiffPercent = c.visual?.refined ? `${c.visual.refined.diffPercentage.toFixed(2)}% (${c.visual.refined.diffPixels.toLocaleString()} px)` : '0.00% (0 px)';
-      const diffEliminated = c.refinement ? c.refinement.metrics.diffReductionPixels : (c.visual?.initial?.diffPixels || 0);
+      const diffEliminated = c.refinement ? (c.refinement.metrics.diffPixelsReduction ?? (c.visual?.initial?.diffPixels || 0)) : (c.visual?.initial?.diffPixels || 0);
       const reductionPct = c.refinement ? `-${c.refinement.metrics.diffReductionPercentage.toFixed(2)}%` : '-0.00%';
       const funcScore = c.functional ? `${c.functional.passedTests}/${c.functional.totalTests} passed` : 'Passed';
       const defectCat = c.visual?.initial?.defectCategory || 'LAYOUT_DISPLACEMENT';
