@@ -653,6 +653,10 @@
   padding: var(--space-6);
 }
 
+.modal-overlay[hidden] {
+  display: none !important;
+}
+
 .modal-card {
   width: 100%;
   max-width: 600px;
@@ -976,8 +980,13 @@
   border-width: 0;
 }
 
-/* Mobile & Tablet Overrides */
 @media (max-width: 1024px) {
+  .nav-links {
+    display: none;
+  }
+  .mobile-toggle {
+    display: block;
+  }
   .hero-container {
     grid-template-columns: 1fr;
   }
@@ -994,12 +1003,6 @@
 }
 
 @media (max-width: 768px) {
-  .nav-links {
-    display: none;
-  }
-  .mobile-toggle {
-    display: block;
-  }
   .hero-title {
     font-size: 2.2rem;
   }

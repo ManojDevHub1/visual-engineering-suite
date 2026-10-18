@@ -2,7 +2,7 @@
   "name": "visual-engineering-suite",
   "displayName": "Visual Engineering Suite",
   "description": "Cross-agent visual engineering skill suite: UI reconstruction, token extraction, visual regression triage, and QA.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "logo": "assets/logo.svg",
   "suggestedPrompts": [
     "Reconstruct this UI screenshot into an accessible frontend component",

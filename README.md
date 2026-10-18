@@ -1,7 +1,7 @@
 # Visual Engineering Suite
 
 [![CI Status](https://github.com/visual-engineering-suite/visual-engineering-suite/actions/workflows/ci.yml/badge.svg)](#automated-testing)
-[![Tests](https://img.shields.io/badge/tests-71%20passed-brightgreen.svg)](#automated-testing)
+[![Tests](https://img.shields.io/badge/tests-79%20passed-brightgreen.svg)](#automated-testing)
 [![Open Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue.svg)](https://skills.sh)
 [![Antigravity Plugin](https://img.shields.io/badge/Antigravity-native%20plugin-purple.svg)](https://antigravity.google)
 [![Node: >= 18.0.0](https://img.shields.io/badge/node-%3E%3D%2018.0.0-green.svg)](https://nodejs.org)
@@ -27,10 +27,11 @@ It enables AI coding agents to inspect visual mockups, mine design tokens, imple
 10. [Real-World Included Examples](#10-real-world-included-examples)
 11. [Antigravity Plugin Packaging (`ves-pack`)](#11-antigravity-plugin-packaging-ves-pack)
 12. [Benchmark & Quality Evaluation System (`ves-benchmark`)](#12-benchmark--quality-evaluation-system-ves-benchmark)
-13. [Troubleshooting & FAQ](#13-troubleshooting--faq)
-14. [Security & Privacy](#14-security--privacy)
-15. [Automated Testing & CI](#15-automated-testing--ci)
-16. [Contributing & Community](#16-contributing--community)
+13. [Official Product Website & Live Preview](#13-official-product-website--live-preview)
+14. [Troubleshooting & FAQ](#14-troubleshooting--faq)
+15. [Security & Privacy](#15-security--privacy)
+16. [Automated Testing & CI](#16-automated-testing--ci)
+17. [Contributing & Community](#17-contributing--community)
 
 ---
 
@@ -484,7 +485,26 @@ To add a new benchmark case to the suite:
 
 ---
 
-## 13. Troubleshooting & FAQ
+## 13. Official Product Website & Live Preview
+
+The suite includes an official, standalone product website and documentation hub located in `website/`. It demonstrates the closed-loop visual refinement engine, provides a live searchable skills directory, installation center, compatibility matrix, and interactive documentation.
+
+```bash
+# Build production static bundle (generates typed data from canonical skills & benchmarks)
+npm run build:site
+
+# Preview the static production build locally
+npm run serve:site
+# Open http://localhost:4173/
+
+# Run the local Vite development server with Hot Module Replacement
+npm run dev:site
+# Open http://localhost:3000/
+```
+
+---
+
+## 14. Troubleshooting & FAQ
 
 ### Q: Why does `ves-doctor` show a warning about Playwright?
 **A**: Playwright is an **optional dependency** used for automated browser screenshot capture. Core visual diffing, dimension checking, token extraction, and refinement coordination use pure JavaScript (`pngjs` + `pixelmatch`) and require no browser binaries. If you need automated browser screenshots, install Playwright:
@@ -507,7 +527,7 @@ npx playwright install chromium
 
 ---
 
-## 14. Security & Privacy
+## 15. Security & Privacy
 
 - **Untrusted Visual Data Defense**: Text, labels, and prompts extracted from mockups or screenshots are treated strictly as **untrusted data**. Operating rules prohibit executing instructions or commands found inside images.
 - **Zero Cloud Exfiltration**: All visual comparison, pixel diffing, token parsing, and refinement runs execute locally on your machine. No screenshots or source code are transmitted to external services.
@@ -515,30 +535,28 @@ npx playwright install chromium
 
 ---
 
-## 15. Automated Testing & CI
+## 16. Automated Testing & CI
 
-The suite includes 71 unit and integration tests using Node.js's native test runner (`node:test` and `node:assert`):
+The suite includes 79 unit and integration tests using Node.js's native test runner (`node:test` and `node:assert`):
 
 ```bash
-# Run all 71 unit and integration tests
+# Run all 79 unit, integration, and website tests
 npm test
 
 # Validate canonical skill manifests and plugin.json
 npm run validate
+
+# Build production website bundle
+npm run build:site
 
 # Run benchmark validation and execution
 npm run benchmark:validate
 npm run benchmark
 ```
 
-### Continuous Integration (GitHub Actions)
-The repository includes a comprehensive GitHub Actions matrix workflow (`.github/workflows/ci.yml`) testing on:
-- **Node.js**: `18.x`, `20.x`, `22.x`, `24.x`
-- **Operating Systems**: `ubuntu-latest`, `windows-latest`, `macos-latest`
-
 ---
 
-## 16. Contributing & Community
+## 17. Contributing & Community
 
 We welcome contributions from frontend engineers, agent tooling developers, and visual QA specialists!
 

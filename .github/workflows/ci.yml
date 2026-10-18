@@ -35,6 +35,9 @@ jobs:
       - name: Validate skill manifests and plugin.json
         run: npm run validate
 
+      - name: Build official product website
+        run: npm run build:site
+
       - name: Run automated test suites
         run: npm test
 
