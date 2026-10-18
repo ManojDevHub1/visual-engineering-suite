@@ -77,4 +77,42 @@ describe('CLI Quality Tools Integration', () => {
     const parsed = JSON.parse(res.stdout);
     assert.strictEqual(parsed.code, 'PLAYWRIGHT_NOT_INSTALLED');
   });
+
+  test('ves-diff returns code 2 on non-numeric threshold', () => {
+    const res = runCli(`bin/ves-diff.js "${basePath}" "${identicalPath}" --threshold invalid --json`);
+    assert.strictEqual(res.code, 2);
+    const parsed = JSON.parse(res.stdout);
+    assert.strictEqual(parsed.code, 'INVALID_ARGUMENT');
+    assert.ok(parsed.error.includes('Invalid --threshold value'));
+  });
+
+  test('ves-diff returns code 2 on out-of-bounds threshold (> 1.0)', () => {
+    const res = runCli(`bin/ves-diff.js "${basePath}" "${identicalPath}" --threshold 2.5 --json`);
+    assert.strictEqual(res.code, 2);
+    const parsed = JSON.parse(res.stdout);
+    assert.strictEqual(parsed.code, 'INVALID_ARGUMENT');
+  });
+
+  test('ves-screenshot returns code 2 on invalid preset', () => {
+    const res = runCli('bin/ves-screenshot.js https://example.com tests/output/test.png --preset invalid-device --json');
+    assert.strictEqual(res.code, 2);
+    const parsed = JSON.parse(res.stdout);
+    assert.strictEqual(parsed.code, 'INVALID_ARGUMENT');
+    assert.ok(parsed.error.includes('Invalid --preset'));
+  });
+
+  test('skill helper check-dimensions.js works standalone on PNG and JPEG', () => {
+    const resPng = runCli(`skills/visual-reconstruction/scripts/check-dimensions.js "${basePath}"`);
+    assert.strictEqual(resPng.code, 0);
+    const parsedPng = JSON.parse(resPng.stdout);
+    assert.strictEqual(parsedPng.width, 800);
+    assert.strictEqual(parsedPng.format, 'png');
+
+    const jpegPath = path.join(FIXTURES_DIR, 'sample-600x400.jpg');
+    const resJpg = runCli(`skills/visual-reconstruction/scripts/check-dimensions.js "${jpegPath}"`);
+    assert.strictEqual(resJpg.code, 0);
+    const parsedJpg = JSON.parse(resJpg.stdout);
+    assert.strictEqual(parsedJpg.width, 600);
+    assert.strictEqual(parsedJpg.format, 'jpeg');
+  });
 });

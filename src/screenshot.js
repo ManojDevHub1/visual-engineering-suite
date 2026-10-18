@@ -81,7 +81,21 @@ export async function captureScreenshot(options) {
   }
 
   const { chromium } = await import('playwright');
-  const browser = await chromium.launch({ headless: true });
+  let browser;
+  try {
+    browser = await chromium.launch({ headless: true });
+  } catch (launchErr) {
+    if (launchErr.message.includes("Executable doesn't exist") || launchErr.message.includes("browserType.launch")) {
+      const err = new Error(
+        'Playwright package is installed, but Chromium browser binaries are missing. Run:\n' +
+        '  npx playwright install chromium\n\n' +
+        'Alternatively, use the agent\'s native browser screenshot tools.'
+      );
+      err.code = 'PLAYWRIGHT_BROWSERS_MISSING';
+      throw err;
+    }
+    throw launchErr;
+  }
   const context = await browser.newContext({
     viewport: { width: finalWidth, height: finalHeight },
     deviceScaleFactor: 1

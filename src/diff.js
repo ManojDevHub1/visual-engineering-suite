@@ -67,6 +67,23 @@ export async function compareImages(refPath, candidatePath, options = {}) {
     maxDiffPixels = 0
   } = options;
 
+  // Validate numeric parameters
+  if (typeof threshold !== 'number' || isNaN(threshold) || threshold < 0 || threshold > 1) {
+    const err = new Error(`Invalid threshold: ${threshold}. Must be a number between 0.0 and 1.0.`);
+    err.code = 'INVALID_ARGUMENT';
+    throw err;
+  }
+  if (typeof maxDiffPercentage !== 'number' || isNaN(maxDiffPercentage) || maxDiffPercentage < 0 || maxDiffPercentage > 100) {
+    const err = new Error(`Invalid maxDiffPercentage: ${maxDiffPercentage}. Must be a number between 0.0 and 100.0.`);
+    err.code = 'INVALID_ARGUMENT';
+    throw err;
+  }
+  if (typeof maxDiffPixels !== 'number' || isNaN(maxDiffPixels) || maxDiffPixels < 0) {
+    const err = new Error(`Invalid maxDiffPixels: ${maxDiffPixels}. Must be an integer >= 0.`);
+    err.code = 'INVALID_ARGUMENT';
+    throw err;
+  }
+
   // 1. Validate files exist and check dimensions
   const dimCheck = await compareDimensions(refPath, candidatePath);
   if (!dimCheck.match) {

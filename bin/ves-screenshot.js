@@ -61,9 +61,59 @@ Exit codes:
   }
 
   const [url, outputPath] = positional;
-  const width = widthVal ? parseInt(widthVal, 10) : 1280;
-  const height = heightVal ? parseInt(heightVal, 10) : 800;
-  const waitTimeout = waitVal ? parseInt(waitVal, 10) : 500;
+
+  if (preset && !VIEWPORT_PRESETS[preset]) {
+    const validPresets = Object.keys(VIEWPORT_PRESETS).join(', ');
+    const msg = `Invalid --preset "${preset}". Allowed values: ${validPresets}.`;
+    if (isJson) {
+      console.log(JSON.stringify({ error: msg, code: 'INVALID_ARGUMENT' }, null, 2));
+    } else {
+      console.error(`\nError: ${msg}\n`);
+    }
+    process.exit(2);
+  }
+
+  let width = 1280;
+  if (widthVal !== null) {
+    width = parseInt(widthVal, 10);
+    if (isNaN(width) || width < 100) {
+      const msg = `Invalid --width "${widthVal}". Must be an integer >= 100.`;
+      if (isJson) {
+        console.log(JSON.stringify({ error: msg, code: 'INVALID_ARGUMENT' }, null, 2));
+      } else {
+        console.error(`\nError: ${msg}\n`);
+      }
+      process.exit(2);
+    }
+  }
+
+  let height = 800;
+  if (heightVal !== null) {
+    height = parseInt(heightVal, 10);
+    if (isNaN(height) || height < 100) {
+      const msg = `Invalid --height "${heightVal}". Must be an integer >= 100.`;
+      if (isJson) {
+        console.log(JSON.stringify({ error: msg, code: 'INVALID_ARGUMENT' }, null, 2));
+      } else {
+        console.error(`\nError: ${msg}\n`);
+      }
+      process.exit(2);
+    }
+  }
+
+  let waitTimeout = 500;
+  if (waitVal !== null) {
+    waitTimeout = parseInt(waitVal, 10);
+    if (isNaN(waitTimeout) || waitTimeout < 0) {
+      const msg = `Invalid --wait "${waitVal}". Must be a non-negative integer.`;
+      if (isJson) {
+        console.log(JSON.stringify({ error: msg, code: 'INVALID_ARGUMENT' }, null, 2));
+      } else {
+        console.error(`\nError: ${msg}\n`);
+      }
+      process.exit(2);
+    }
+  }
 
   try {
     const result = await captureScreenshot({
@@ -95,7 +145,7 @@ Exit codes:
     } else {
       console.error(`\nScreenshot Error: ${err.message}\n`);
     }
-    process.exit(err.code === 'PLAYWRIGHT_NOT_INSTALLED' ? 2 : 1);
+    process.exit(['PLAYWRIGHT_NOT_INSTALLED', 'PLAYWRIGHT_BROWSERS_MISSING'].includes(err.code) ? 2 : 1);
   }
 }
 

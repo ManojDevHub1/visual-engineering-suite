@@ -141,7 +141,7 @@ export async function validateSkillFile(skillMdPath) {
 
   // Validate internal markdown links point to existing files
   const skillDir = path.dirname(path.resolve(skillMdPath));
-  const linkRegex = /\[([^\]]+)\]\((?!https?:\/\/|mailto:|#)([^)]+)\)/g;
+  const linkRegex = /\[([^\]]+)\]\((?!(?:https?|mailto|[a-zA-Z0-9+.-]+):\/|#)([^)]+)\)/g;
   let match;
   while ((match = linkRegex.exec(body)) !== null) {
     linksChecked++;

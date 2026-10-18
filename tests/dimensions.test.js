@@ -50,4 +50,13 @@ describe('Image Dimension Inspector & Comparator', () => {
       /Failed to decode image|corrupt/
     );
   });
+
+  test('extracts correct dimensions from JPEG header (600x400)', async () => {
+    const jpegPath = path.join(FIXTURES_DIR, 'sample-600x400.jpg');
+    const dim = await getImageDimensions(jpegPath);
+    assert.strictEqual(dim.width, 600);
+    assert.strictEqual(dim.height, 400);
+    assert.strictEqual(dim.format, 'jpeg');
+    assert.ok(dim.sizeBytes > 0);
+  });
 });

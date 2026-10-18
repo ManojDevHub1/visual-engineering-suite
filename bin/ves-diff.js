@@ -60,9 +60,48 @@ Exit codes:
   }
 
   const [refPath, candidatePath] = positional;
-  const threshold = thresholdVal ? parseFloat(thresholdVal) : 0.1;
-  const maxDiffPercentage = maxDiffVal ? parseFloat(maxDiffVal) : 0.0;
-  const maxDiffPixels = maxPixelsVal ? parseInt(maxPixelsVal, 10) : 0;
+
+  let threshold = 0.1;
+  if (thresholdVal !== null) {
+    threshold = parseFloat(thresholdVal);
+    if (isNaN(threshold) || threshold < 0 || threshold > 1) {
+      const msg = `Invalid --threshold value "${thresholdVal}". Must be a number between 0.0 and 1.0 (e.g. 0.1).`;
+      if (isJson) {
+        console.log(JSON.stringify({ error: msg, code: 'INVALID_ARGUMENT' }, null, 2));
+      } else {
+        console.error(`\nError: ${msg}\n`);
+      }
+      process.exit(2);
+    }
+  }
+
+  let maxDiffPercentage = 0.0;
+  if (maxDiffVal !== null) {
+    maxDiffPercentage = parseFloat(maxDiffVal);
+    if (isNaN(maxDiffPercentage) || maxDiffPercentage < 0 || maxDiffPercentage > 100) {
+      const msg = `Invalid --max-diff value "${maxDiffVal}". Must be a number between 0.0 and 100.0 (e.g. 1.5).`;
+      if (isJson) {
+        console.log(JSON.stringify({ error: msg, code: 'INVALID_ARGUMENT' }, null, 2));
+      } else {
+        console.error(`\nError: ${msg}\n`);
+      }
+      process.exit(2);
+    }
+  }
+
+  let maxDiffPixels = 0;
+  if (maxPixelsVal !== null) {
+    maxDiffPixels = parseInt(maxPixelsVal, 10);
+    if (isNaN(maxDiffPixels) || maxDiffPixels < 0) {
+      const msg = `Invalid --max-pixels value "${maxPixelsVal}". Must be an integer >= 0.`;
+      if (isJson) {
+        console.log(JSON.stringify({ error: msg, code: 'INVALID_ARGUMENT' }, null, 2));
+      } else {
+        console.error(`\nError: ${msg}\n`);
+      }
+      process.exit(2);
+    }
+  }
 
   try {
     const result = await compareImages(refPath, candidatePath, {

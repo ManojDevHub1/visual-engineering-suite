@@ -1,21 +1,52 @@
 #!/usr/bin/env node
-import { spawn } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const cliScript = path.resolve(__dirname, '../../../bin/ves-screenshot.js');
+
+function resolveCli(toolName) {
+  const candidates = [
+    path.resolve(__dirname, `../../../bin/${toolName}.js`),
+    path.resolve(process.cwd(), `bin/${toolName}.js`),
+    path.resolve(process.cwd(), `node_modules/visual-engineering-suite/bin/${toolName}.js`),
+    path.resolve(__dirname, `../../../../node_modules/visual-engineering-suite/bin/${toolName}.js`),
+    path.resolve(__dirname, `../../../node_modules/visual-engineering-suite/bin/${toolName}.js`)
+  ];
+
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  return null;
+}
 
 const args = process.argv.slice(2);
-if (args.length < 2) {
+if (args.length < 2 && !args.includes('--help') && !args.includes('-h')) {
   console.log('Usage: node capture.js <url> <outputPath> [--preset mobile|tablet|desktop|wide] [options]');
   process.exit(1);
 }
 
-const child = spawn(process.execPath, [cliScript, ...args], {
-  stdio: 'inherit'
-});
+const localScript = resolveCli('ves-screenshot');
 
-child.on('exit', code => {
-  process.exit(code ?? 0);
-});
+if (localScript) {
+  const child = spawn(process.execPath, [localScript, ...args], {
+    stdio: 'inherit'
+  });
+  child.on('exit', code => process.exit(code ?? 0));
+  child.on('error', err => {
+    console.error(`Execution error: ${err.message}`);
+    process.exit(2);
+  });
+} else {
+  const isWindows = process.platform === 'win32';
+  const npxCmd = isWindows ? 'npx.cmd' : 'npx';
+  const child = spawn(npxCmd, ['--yes', 'ves-screenshot', ...args], {
+    stdio: 'inherit'
+  });
+  child.on('exit', code => process.exit(code ?? 0));
+  child.on('error', () => {
+    console.error('Could not locate ves-screenshot. In the development repository, run via "node bin/ves-screenshot.js". In an installed project, install playwright via "npm i -D playwright" or use native agent browser tools.');
+    process.exit(2);
+  });
+}
