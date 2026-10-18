@@ -100,6 +100,19 @@ function attachEventHandlers() {
     });
   });
 
+  // 2b. Interactive Split Comparison Slider
+  const sliderInput = document.getElementById('split-slider-range') as HTMLInputElement | null;
+  const sliderOverlay = document.getElementById('slider-overlay');
+  const sliderHandle = document.getElementById('slider-handle');
+
+  if (sliderInput && sliderOverlay && sliderHandle) {
+    sliderInput.addEventListener('input', () => {
+      const val = sliderInput.value;
+      sliderOverlay.style.width = `${val}%`;
+      sliderHandle.style.left = `${val}%`;
+    });
+  }
+
   // 3. Workflow Stepper Navigation
   const stepNodes = document.querySelectorAll('.step-node');
   const stagePanels = document.querySelectorAll('.stage-panel');

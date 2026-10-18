@@ -63,6 +63,7 @@ export function renderCompatibilityMatrix(): string {
         </div>
 
         <div class="matrix-table-wrapper table-responsive card">
+          <div class="table-scroll-hint" aria-hidden="true">&larr; Swipe horizontally to inspect all columns &rarr;</div>
           <table class="compat-table">
             <thead>
               <tr>

@@ -72,8 +72,8 @@ export function renderHero(): string {
           </div>
         </div>
 
-        <!-- Custom 3-State Product Preview Canvas (Contrasting Dark Instrumentation Panel) -->
-        <div class="hero-canvas-frame" role="region" aria-label="Authentic product inspection demonstration illustrating 3 core states">
+        <!-- Custom Product Preview Canvas (Contrasting Dark Instrumentation Panel) -->
+        <div class="hero-canvas-frame" role="region" aria-label="Authentic product inspection demonstration illustrating visual verification states">
           <!-- Canvas Top Instrumentation Header -->
           <div class="canvas-header">
             <div class="canvas-title-group">
@@ -81,11 +81,15 @@ export function renderHero(): string {
               <span class="canvas-viewport-tag">800 &times; 500 px</span>
             </div>
 
-            <!-- 3 Core States Tablist -->
+            <!-- Verification States & Interactive Slider Tablist -->
             <div class="visual-tabs canvas-tabs" role="tablist" aria-label="Visual comparison stages">
               <button type="button" class="visual-tab active" role="tab" aria-selected="true" data-target="diff" id="tab-diff">
                 <span class="tab-indicator tab-indicator-diff"></span>
                 <span>3. Visual Differences</span>
+              </button>
+              <button type="button" class="visual-tab" role="tab" aria-selected="false" data-target="slider" id="tab-slider">
+                <span class="tab-indicator tab-indicator-slider"></span>
+                <span>Interactive Split Slider</span>
               </button>
               <button type="button" class="visual-tab" role="tab" aria-selected="false" data-target="reference" id="tab-ref">
                 <span class="tab-indicator"></span>
@@ -123,7 +127,7 @@ export function renderHero(): string {
                   <div class="bbox-tag">DEFECT LOCALIZED</div>
                 </div>
 
-                <div class="discrepancy-callout-card" style="top: 36%; left: 30%;">
+                <div class="discrepancy-callout-card">
                   <div class="callout-header">
                     <span class="callout-chip chip-magenta">BOUNDING BOX</span>
                     <span class="callout-coords">x: 48..207, y: 248..295</span>
@@ -135,6 +139,30 @@ export function renderHero(): string {
                     <span class="drift-to">Reference: #2563EB (Blue-600)</span>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <!-- Interactive Split Comparison Slider View -->
+            <div class="visual-view" id="view-slider" role="tabpanel" aria-labelledby="tab-slider" hidden>
+              <div class="canvas-image-container comparison-slider-container">
+                <img src="/images/rendered-hero.png" alt="Candidate initial browser render before refinement" width="800" height="500" class="slider-image-base" />
+                <div class="slider-image-overlay" id="slider-overlay" style="width: 50%;">
+                  <img src="/images/reference-hero.png" alt="Reference design mockup of landing page hero" width="800" height="500" class="slider-image-top" />
+                  <div class="canvas-stage-badge badge-pass" style="top: 12px; left: 12px;">Reference (Target)</div>
+                </div>
+                <div class="canvas-stage-badge badge-warn" style="top: 12px; right: 12px;">Rendered (Before Refinement)</div>
+                <div class="slider-handle" id="slider-handle" style="left: 50%;" aria-hidden="true">
+                  <div class="slider-handle-line"></div>
+                  <div class="slider-handle-thumb">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <input type="range" id="split-slider-range" min="0" max="100" value="50" class="slider-input" aria-label="Slide to compare reference ground truth against rendered implementation" />
               </div>
             </div>
 

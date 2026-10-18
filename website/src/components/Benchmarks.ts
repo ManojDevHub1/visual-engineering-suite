@@ -65,6 +65,7 @@ export function renderBenchmarks(): string {
           </div>
 
           <div class="table-responsive">
+            <div class="table-scroll-hint" aria-hidden="true">&larr; Swipe horizontally to inspect all columns &rarr;</div>
             <table class="benchmark-table">
               <thead>
                 <tr>

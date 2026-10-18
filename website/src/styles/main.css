@@ -12,7 +12,7 @@
   /* Primary Editorial Ink Typography */
   --ink-primary: #111310;
   --ink-secondary: #51554E;
-  --ink-muted: #7E837A;
+  --ink-muted: #575D52;
   --ink-faint: #B1B5AC;
 
   /* Architectural Borders & Dividers */
@@ -38,6 +38,7 @@
   --cool-cobalt: #4B5FFF;
   --cool-cobalt-faint: rgba(75, 95, 255, 0.10);
   --diff-magenta: #FF007A;
+  --diff-magenta-text: #FF3388;
   --diff-magenta-faint: rgba(255, 0, 122, 0.12);
 
   /* Status Tokens */
@@ -571,3 +572,10 @@ code, pre {
   width: auto;
   height: auto;
 }
+
+/* High-Contrast Accessible Keyboard Focus Rings */
+:focus-visible {
+  outline: 2px solid var(--electric-lime);
+  outline-offset: 3px;
+}
+
