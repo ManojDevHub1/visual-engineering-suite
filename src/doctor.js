@@ -424,7 +424,7 @@ export function formatDoctorTerminal(audit) {
   lines.push('--- 5. Detected Agent Installations ---');
   if (audit.agentInstallations.length === 0) {
     lines.push('  No workspace or global agent installations currently detected.');
-    lines.push('  (Skills can be installed via: npx skills add . -a claude-code -a cursor -a antigravity)');
+    lines.push('  (Install offline via: node bin/ves-doctor.js --install [all|claude-code|cursor|antigravity], or: npx skills add .)');
   } else {
     for (const inst of audit.agentInstallations) {
       lines.push(`  Agent:          ${inst.agent} (${inst.scope} ${inst.type})`);
@@ -460,4 +460,50 @@ export function formatDoctorTerminal(audit) {
   }
 
   return lines.join('\n');
+}
+
+/**
+ * Installs canonical skills locally into agent workspace directories without requiring npx or internet access.
+ *
+ * @param {object} [options]
+ * @param {'all' | 'claude-code' | 'cursor' | 'antigravity'} [options.agent='all']
+ * @param {string} [options.workspaceDir=process.cwd()]
+ * @returns {Promise<{ success: boolean, installed: Array<{ agent: string, targetPath: string, count: number }> }>}
+ */
+export async function installSkillsLocally(options = {}) {
+  const workspaceDir = path.resolve(options.workspaceDir || process.cwd());
+  const agent = options.agent || 'all';
+  const skillsSourceDir = path.join(workspaceDir, 'skills');
+
+  if (!fs.existsSync(skillsSourceDir)) {
+    throw new Error(`Canonical skills directory not found: ${skillsSourceDir}`);
+  }
+
+  const targets = [];
+  if (agent === 'all' || agent === 'antigravity') {
+    targets.push({ agent: 'antigravity', path: path.join(workspaceDir, '.agents', 'skills') });
+  }
+  if (agent === 'all' || agent === 'claude-code') {
+    targets.push({ agent: 'claude-code', path: path.join(workspaceDir, '.claude', 'skills') });
+  }
+  if (agent === 'all' || agent === 'cursor') {
+    targets.push({ agent: 'cursor', path: path.join(workspaceDir, '.cursor', 'skills') });
+  }
+
+  const installed = [];
+
+  for (const target of targets) {
+    fs.mkdirSync(target.path, { recursive: true });
+    let count = 0;
+    for (const skillName of CANONICAL_SKILL_NAMES) {
+      const srcSkillDir = path.join(skillsSourceDir, skillName);
+      if (!fs.existsSync(srcSkillDir)) continue;
+      const destSkillDir = path.join(target.path, skillName);
+      fs.cpSync(srcSkillDir, destSkillDir, { recursive: true });
+      count++;
+    }
+    installed.push({ agent: target.agent, targetPath: target.path, count });
+  }
+
+  return { success: true, installed };
 }

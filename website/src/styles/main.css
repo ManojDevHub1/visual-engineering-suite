@@ -117,6 +117,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 body {
@@ -535,6 +536,10 @@ code, pre {
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   .section { padding: var(--space-12) 0; }
   .section-header { margin-bottom: var(--space-10); }
+}
+
+@media (max-width: 380px) {
+  .container { padding: 0 var(--space-3); }
 }
 
 /* Accessibility Utilities */

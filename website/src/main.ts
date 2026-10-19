@@ -169,38 +169,7 @@ function attachEventHandlers() {
     }
   });
 
-  // 2. Hero Visual Tabs Switcher (Accessible WAI-ARIA Tablist)
-  const heroTabs = document.querySelectorAll('.visual-tab');
-  const heroViews = document.querySelectorAll('.visual-view');
-  setupAccessibleTablist(heroTabs, heroViews, (tab) => `view-${tab.getAttribute('data-target')}`, {
-    orientation: 'horizontal'
-  });
-
-  // 2b. Interactive Split Comparison Slider with Real-time Telemetry & Screen Reader State
-  const sliderInput = document.getElementById('split-slider-range') as HTMLInputElement | null;
-  const sliderOverlay = document.getElementById('slider-overlay');
-  const sliderHandle = document.getElementById('slider-handle');
-
-  if (sliderInput && sliderOverlay && sliderHandle) {
-    const updateSlider = (val: string) => {
-      const num = Number(val);
-      sliderOverlay.style.width = `${val}%`;
-      sliderHandle.style.left = `${val}%`;
-      sliderInput.setAttribute('aria-valuenow', val);
-      sliderInput.setAttribute(
-        'aria-valuetext',
-        `${val}% Reference ground truth, ${100 - num}% Rendered implementation`
-      );
-    };
-
-    sliderInput.addEventListener('input', () => {
-      updateSlider(sliderInput.value);
-    });
-    // Initialize aria-valuetext
-    updateSlider(sliderInput.value || '50');
-  }
-
-  // 3. Workflow Stepper Navigation (Accessible Horizontal Tablist)
+  // 2. Workflow Stepper Navigation (Accessible Horizontal Tablist)
   const stepNodes = document.querySelectorAll('.step-node');
   const stagePanels = document.querySelectorAll('.stage-panel');
   setupAccessibleTablist(stepNodes, stagePanels, (node) => `step-panel-${node.getAttribute('data-step')}`, {

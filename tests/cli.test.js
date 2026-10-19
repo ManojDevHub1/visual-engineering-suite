@@ -1,6 +1,8 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import path from 'node:path';
+import fs from 'node:fs';
+import os from 'node:os';
 import { execSync } from 'node:child_process';
 
 const FIXTURES_DIR = path.resolve('tests/fixtures');
@@ -150,6 +152,22 @@ describe('CLI Quality Tools Integration', () => {
   test('ves-benchmark exits with code 2 on invalid mode', () => {
     const res = runCli('bin/ves-benchmark.js --mode non-existent --json');
     assert.strictEqual(res.code, 2);
+  });
+
+  test('ves-doctor --install installs canonical skills and exits with code 0', () => {
+    const tempWs = fs.mkdtempSync(path.join(os.tmpdir(), 'ves-cli-install-'));
+    try {
+      // Copy skills to tempWs
+      fs.cpSync(path.resolve('skills'), path.join(tempWs, 'skills'), { recursive: true });
+      fs.copyFileSync(path.resolve('plugin.json'), path.join(tempWs, 'plugin.json'));
+      fs.cpSync(path.resolve('assets'), path.join(tempWs, 'assets'), { recursive: true });
+
+      const res = runCli(`bin/ves-doctor.js "${tempWs}" --install claude-code --json`);
+      assert.strictEqual(res.code, 0);
+      assert.ok(fs.existsSync(path.join(tempWs, '.claude', 'skills', 'visual-reconstruction', 'SKILL.md')));
+    } finally {
+      fs.rmSync(tempWs, { recursive: true, force: true });
+    }
   });
 });
 

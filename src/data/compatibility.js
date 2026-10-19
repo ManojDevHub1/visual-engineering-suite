@@ -47,7 +47,7 @@ export const AGENT_COMPATIBILITY_RECORDS = [
     highestTier: 'Tier 6: Benchmark Completed',
     overallStatus: 'Verified',
     badgeType: 'badge-lime',
-    evidence: 'Directly executed and verified in live Antigravity sessions: full refinement loops, pure-JS diff maps, 79 unit/CLI tests, and run artifacts persisted on disk.',
+    evidence: 'Directly executed and verified in live Antigravity sessions: full refinement loops, pure-JS diff maps, automated unit/CLI test suite, and run artifacts persisted on disk.',
     limitations: 'Windows 11 Node.js worker concurrency requires --test-concurrency=1. Headless browser screenshotting requires local Playwright chromium installation.'
   },
   {

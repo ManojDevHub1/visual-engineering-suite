@@ -7,7 +7,6 @@ export function renderNavbar(): string {
         <a href="#" class="brand" aria-label="${siteConfig.brandName} Home">
           <img src="/assets/logo.svg" alt="" width="26" height="26" class="brand-logo" />
           <span class="brand-name">${siteConfig.brandName}</span>
-          <span class="badge badge-dark brand-badge">v${siteConfig.version}</span>
         </a>
 
         <nav class="nav-links" aria-label="Main Navigation">

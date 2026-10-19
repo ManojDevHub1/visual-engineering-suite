@@ -27,6 +27,7 @@
     "benchmark:functional": "node bin/ves-benchmark.js --mode functional",
     "benchmark:validate": "node bin/ves-benchmark.js --mode validate",
     "build:site": "node scripts/build-site-data.js && vite build",
+    "dev": "node scripts/build-site-data.js && vite",
     "dev:site": "node scripts/build-site-data.js && vite",
     "serve:site": "vite preview"
   },

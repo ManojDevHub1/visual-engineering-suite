@@ -1,7 +1,7 @@
 # Visual Engineering Suite
 
 [![CI Status](https://github.com/ManojDevHub1/visual-engineering-suite/actions/workflows/ci.yml/badge.svg)](#automated-testing)
-[![Tests](https://img.shields.io/badge/tests-79%20passed-brightgreen.svg)](#automated-testing)
+[![Tests](https://img.shields.io/badge/tests-90%20passed%20(16%20suites)-brightgreen.svg)](#automated-testing)
 [![Open Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue.svg)](https://skills.sh)
 [![Antigravity Plugin](https://img.shields.io/badge/Antigravity-native%20plugin-purple.svg)](https://antigravity.google)
 [![Node: >= 18.0.0](https://img.shields.io/badge/node-%3E%3D%2018.0.0-green.svg)](https://nodejs.org)
@@ -104,7 +104,7 @@ npm run check-health
 ```
 
 ### Step 3: Run the Automated Test Suite
-Execute the 55 automated unit and integration tests:
+Execute the 90 automated unit and integration tests across 16 test suites:
 ```bash
 npm test
 ```
@@ -261,7 +261,7 @@ We distinguish **six explicit empirical verification tiers** to maintain strict 
 
 | Platform | Workspace Path | Global Path | Installation Mechanism | Script Execution | External Dependencies | Verification Level | Status | Evidence & Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Google Antigravity** | `.agents/plugins/` or `.agents/skills/` | `~/.gemini/config/plugins/` or `~/.gemini/antigravity/skills/` | Native Plugin (`plugin.json`), Skills CLI, manual copy | Native terminal execution (`run_command`) & RPC | Node.js runtime (`pngjs`, `pixelmatch`, optional `playwright`) | **Level 6: Benchmark Completed** | **Verified** | Directly executed in Antigravity sessions: full refinement loops, pure-JS diff maps, 79 unit/CLI tests, and run artifacts persisted on disk. |
+| **Google Antigravity** | `.agents/plugins/` or `.agents/skills/` | `~/.gemini/config/plugins/` or `~/.gemini/antigravity/skills/` | Native Plugin (`plugin.json`), Skills CLI, manual copy | Native terminal execution (`run_command`) & RPC | Node.js runtime (`pngjs`, `pixelmatch`, optional `playwright`) | **Level 6: Benchmark Completed** | **Verified** | Directly executed in Antigravity sessions: full refinement loops, pure-JS diff maps, 90 automated unit/CLI tests across 16 test suites, and run artifacts persisted on disk. |
 | **Claude Code** | `.claude/skills/` | `~/.claude/skills/` | Skills CLI (`npx skills add . -a claude-code`), manual copy | Bash tool | Node.js runtime via project `node_modules` or `npx` | **Level 4: Invocation Verified** | **Partially Verified** | Validated against Anthropic Agent Skills spec. Installation verified via Skills CLI. Direct skill activation observed in conversation context. |
 | **Cursor** | `.agents/skills/` or `.cursor/skills/` | `~/.cursor/skills/` | Skills CLI (`npx skills add . -a cursor`), manual copy | Terminal tool execution | Node.js runtime via project `node_modules` or `npx` | **Level 4: Invocation Verified** | **Partially Verified** | Validated against open `.agents` standard. Directory placement verified via Skills CLI. Skill prompt parsing verified. |
 | **Vercel Skills CLI** | Dynamic | Dynamic (`-g`) | CLI tool (`npx skills add <source>`) | Copies scripts and references intact | Standard Node.js environment | **Level 3: Installation Verified** | **Verified** | Tested with local and remote sources; successfully copies canonical skills into target agent folders. |
@@ -538,10 +538,10 @@ npx playwright install chromium
 
 ## 16. Automated Testing & CI
 
-The suite includes 79 unit and integration tests using Node.js's native test runner (`node:test` and `node:assert`):
+The suite includes 90 unit and integration tests across 16 test suites using Node.js's native test runner (`node:test` and `node:assert`):
 
 ```bash
-# Run all 79 unit, integration, and website tests
+# Run all 90 unit, integration, and website tests across 16 test suites
 npm test
 
 # Validate canonical skill manifests and plugin.json

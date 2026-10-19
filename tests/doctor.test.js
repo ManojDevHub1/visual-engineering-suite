@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import path from 'node:path';
 import fs from 'node:fs';
 import os from 'node:os';
-import { runDoctorAudit, computeFileChecksum, formatDoctorTerminal, CANONICAL_SKILL_NAMES } from '../src/doctor.js';
+import { runDoctorAudit, computeFileChecksum, formatDoctorTerminal, installSkillsLocally, CANONICAL_SKILL_NAMES } from '../src/doctor.js';
 
 describe('Doctor & Installation Health Auditor', () => {
   test('computeFileChecksum generates consistent SHA-256 for existing file', () => {
@@ -105,6 +105,44 @@ describe('Doctor & Installation Health Auditor', () => {
 
       assert.strictEqual(driftedInst.driftCount, 1);
       assert.ok(driftedAudit.issues.warnings.some(w => w.includes('drifted skill')));
+    } finally {
+      fs.rmSync(tempWorkspace, { recursive: true, force: true });
+    }
+  });
+
+  test('installSkillsLocally installs canonical skills into target agent workspace directories', async () => {
+    const tempWorkspace = fs.mkdtempSync(path.join(os.tmpdir(), 'ves-install-ws-'));
+    try {
+      // Setup canonical skills in temp workspace
+      const canonicalSkillsTarget = path.join(tempWorkspace, 'skills');
+      fs.cpSync(path.join(process.cwd(), 'skills'), canonicalSkillsTarget, { recursive: true });
+
+      // Install for claude-code
+      const claudeRes = await installSkillsLocally({
+        agent: 'claude-code',
+        workspaceDir: tempWorkspace
+      });
+
+      assert.strictEqual(claudeRes.success, true);
+      assert.strictEqual(claudeRes.installed.length, 1);
+      assert.strictEqual(claudeRes.installed[0].agent, 'claude-code');
+      assert.strictEqual(claudeRes.installed[0].count, 7);
+
+      for (const skillName of CANONICAL_SKILL_NAMES) {
+        const destSkill = path.join(tempWorkspace, '.claude', 'skills', skillName, 'SKILL.md');
+        assert.ok(fs.existsSync(destSkill), `Skill ${skillName} must exist in .claude/skills`);
+      }
+
+      // Install all agents
+      const allRes = await installSkillsLocally({
+        agent: 'all',
+        workspaceDir: tempWorkspace
+      });
+
+      assert.strictEqual(allRes.success, true);
+      assert.strictEqual(allRes.installed.length, 3);
+      assert.ok(fs.existsSync(path.join(tempWorkspace, '.agents', 'skills', 'visual-reconstruction', 'SKILL.md')));
+      assert.ok(fs.existsSync(path.join(tempWorkspace, '.cursor', 'skills', 'visual-refinement-loop', 'SKILL.md')));
     } finally {
       fs.rmSync(tempWorkspace, { recursive: true, force: true });
     }

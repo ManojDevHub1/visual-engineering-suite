@@ -84,6 +84,11 @@ npm install</code></pre>
             <td><code>node bin/ves-dimension.js &lt;img1.png&gt; [&lt;img2.png&gt;]</code></td>
           </tr>
           <tr>
+            <td><code>ves-screenshot</code></td>
+            <td>Headless browser viewport screenshot capture (requires optional playwright)</td>
+            <td><code>node bin/ves-screenshot.js &lt;url&gt; &lt;out.png&gt; [--preset mobile|tablet|desktop|wide]</code></td>
+          </tr>
+          <tr>
             <td><code>ves-validate</code></td>
             <td>Frontmatter and markdown internal link validator</td>
             <td><code>node bin/ves-validate.js [dir]</code></td>

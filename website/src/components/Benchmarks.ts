@@ -45,12 +45,12 @@ export function renderBenchmarks(): string {
           </div>
 
           <div class="kpi-card">
-            <span class="kpi-label">Automated Test Suites</span>
+            <span class="kpi-label">Automated Tests</span>
             <div class="kpi-value-wrap">
-              <span class="kpi-num">79</span>
+              <span class="kpi-num">90</span>
               <span class="kpi-subtag">PASSING</span>
             </div>
-            <p class="kpi-desc">15 test suites executing unit, CLI, regression, and browser QA checks.</p>
+            <p class="kpi-desc">16 test suites executing unit, CLI, regression, and browser QA checks.</p>
           </div>
         </div>
 

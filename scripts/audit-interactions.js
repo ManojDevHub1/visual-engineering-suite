@@ -12,16 +12,10 @@ async function audit() {
   page.on('pageerror', err => pageErrors.push(err.message));
 
   console.log('--- 1. Page Load & Basic State ---');
-  await page.goto('http://localhost:4173/', { waitUntil: 'networkidle' });
+  const targetUrl = process.env.TARGET_URL || 'http://localhost:3000/';
+  await page.goto(targetUrl, { waitUntil: 'networkidle' });
   const title = await page.title();
   console.log('Title:', title);
-
-  console.log('--- 2. Keyboard Navigation in Hero Tabs ---');
-  const heroTabDiff = await page.$('#tab-diff');
-  await heroTabDiff.focus();
-  await page.keyboard.press('ArrowRight');
-  const heroTabSliderSelected = await page.$eval('#tab-slider', el => el.getAttribute('aria-selected'));
-  console.log('Hero tab ArrowRight selects slider:', heroTabSliderSelected === 'true');
 
   console.log('--- 3. Keyboard Navigation in Install Tabs ---');
   const installTab1 = await page.$('#tab-install-skills-cli');
@@ -74,12 +68,8 @@ async function audit() {
   });
   console.log('Focus restored to originating button:', focusRestoredToBtn);
 
-  console.log('--- 6. Split Slider aria-valuetext ---');
-  const sliderValueText = await page.$eval('#split-slider-range', el => el.getAttribute('aria-valuetext'));
-  console.log('Initial slider aria-valuetext:', sliderValueText);
-
   console.log('--- 7. Deep Linking / Hash Navigation ---');
-  await page.goto('http://localhost:4173/#docs/troubleshooting');
+  await page.goto(`${targetUrl}#docs/troubleshooting`);
   const troubleTabActive = await page.$eval('#tab-doc-troubleshooting', el => el.classList.contains('active')).catch(() => false);
   const troublePanelActive = await page.$eval('#panel-doc-troubleshooting', el => !el.hidden).catch(() => false);
   console.log('Deep link to #docs/troubleshooting activates tab:', troubleTabActive, 'and panel:', troublePanelActive);

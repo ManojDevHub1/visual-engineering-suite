@@ -171,10 +171,10 @@ describe('Website & Documentation Hub', () => {
 
     // Hero
     const heroCode = await fs.promises.readFile(path.join(compDir, 'Hero.ts'), 'utf8');
-    assert.ok(heroCode.includes('role="tablist"'));
-    assert.ok(heroCode.includes('role="tab"'));
-    assert.ok(heroCode.includes('aria-selected'));
-    assert.ok(heroCode.includes('x: 48..207, y: 248..295'));
+    assert.ok(heroCode.includes('hero-headline'));
+    assert.ok(heroCode.includes('hero-install-strip'));
+    assert.ok(heroCode.includes('hero-editorial-grid'));
+    assert.ok(heroCode.includes('btn-hero'));
 
     // Workflow
     const workflowCode = await fs.promises.readFile(path.join(compDir, 'Workflow.ts'), 'utf8');
