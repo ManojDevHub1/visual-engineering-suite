@@ -1,30 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" fill="none">
-  <rect width="256" height="256" rx="48" fill="#0F172A"/>
-  <rect x="32" y="32" width="192" height="192" rx="24" stroke="#38BDF8" stroke-width="8" stroke-dasharray="12 8" opacity="0.6"/>
-  
-  <!-- Canvas / Screen representation -->
-  <rect x="56" y="56" width="144" height="144" rx="16" fill="#1E293B" stroke="#64748B" stroke-width="4"/>
-  
-  <!-- Top navigation bar mockup -->
-  <rect x="56" y="56" width="144" height="28" rx="16" fill="#334155"/>
-  <circle cx="76" cy="70" r="4" fill="#EF4444"/>
-  <circle cx="90" cy="70" r="4" fill="#F59E0B"/>
-  <circle cx="104" cy="70" r="4" fill="#10B981"/>
-  
-  <!-- Visual comparison split / loupe / grid -->
-  <path d="M128 84V200" stroke="#38BDF8" stroke-width="4" stroke-dasharray="6 4"/>
-  
-  <!-- Left side: Wireframe / skeleton -->
-  <rect x="70" y="100" width="44" height="12" rx="4" fill="#475569"/>
-  <rect x="70" y="122" width="48" height="40" rx="8" fill="#334155"/>
-  
-  <!-- Right side: Rendered / Verified -->
-  <rect x="138" y="100" width="44" height="12" rx="4" fill="#38BDF8"/>
-  <rect x="138" y="122" width="48" height="40" rx="8" fill="#0284C7"/>
-  <circle cx="162" cy="142" r="10" fill="#22C55E"/>
-  <path d="M157 142L161 146L167 138" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  
-  <!-- Target reticle / QA crosshair -->
-  <circle cx="128" cy="142" r="28" stroke="#F43F5E" stroke-width="4" opacity="0.9"/>
-  <path d="M128 106V118M128 166V178M92 142H104M152 142H164" stroke="#F43F5E" stroke-width="4" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none" role="img" aria-labelledby="favicon-title">
+  <title id="favicon-title">Visual Engineering Suite</title>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="#171916"/>
+  <rect x="9" y="10" width="46" height="44" rx="6" fill="#21241F" stroke="#F5F4EE" stroke-width="3.5"/>
+  <path d="M32 12v40" stroke="#6C7167" stroke-width="2.5"/>
+  <rect x="14" y="19" width="14" height="5" rx="2.5" fill="#6C7167"/>
+  <rect x="14" y="29" width="14" height="17" rx="2.5" fill="#282C25" stroke="#6C7167" stroke-width="1.5"/>
+  <rect x="36" y="19" width="14" height="5" rx="2.5" fill="#D6FF43"/>
+  <path d="m37 36 5 5 9-11" stroke="#D6FF43" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
